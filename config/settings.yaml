@@ -1,0 +1,25 @@
+# Configuration Doog Intelligent Market
+report_time: "06:30"
+language: "fr"
+max_opportunities: 3
+retention_days: 30
+
+# Actifs suivis
+assets:
+  crypto: ["BTC", "ETH", "SOL"]
+  etf: ["IBIT", "FBTC", "BITB", "ARKB", "HODL"]
+
+# Sources actives
+sources:
+  coingecko: true
+  yahoo_finance: true
+  theblock: true
+  cointelegraph: true
+  fed: true
+  bce: true
+
+# Notification NTFY (à configurer plus tard)
+ntfy:
+  enabled: false
+  topic: "doog-market"
+  server: "https://ntfy.sh"

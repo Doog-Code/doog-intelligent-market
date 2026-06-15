@@ -1,0 +1,41 @@
+name: Doog Intelligent Market — Rapport quotidien
+
+on:
+  schedule:
+    - cron: '30 5 * * *'  # 05h30 UTC = 07h30 heure française (été)
+  workflow_dispatch:        # Permet aussi de lancer manuellement
+
+jobs:
+  generate-report:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Récupère le code
+        uses: actions/checkout@v4
+
+      - name: Configure Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Installe les dépendances
+        run: |
+          pip install requests feedparser python-dotenv pyyaml jinja2 groq
+
+      - name: Crée le fichier .env
+        run: |
+          echo "GROQ_API_KEY=${{ secrets.GROQ_API_KEY }}" > .env
+
+      - name: Initialise la base de données
+        run: python3 database/init_db.py
+
+      - name: Génère le rapport
+        run: python3 main.py --no-browser
+
+      - name: Publie sur GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: .
+          include_files: rapport_*.html
+          destination_dir: rapport

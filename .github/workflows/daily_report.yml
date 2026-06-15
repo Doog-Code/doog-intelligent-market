@@ -3,18 +3,20 @@ name: Doog Intelligent Market — Rapport quotidien
 on:
   schedule:
     - cron: '30 5 * * *'  # 05h30 UTC = 07h30 heure française (été)
-  workflow_dispatch:        # Permet aussi de lancer manuellement
+  workflow_dispatch:        # Lancement manuel possible
 
 jobs:
   generate-report:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
 
     steps:
       - name: Récupère le code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v3
 
       - name: Configure Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v4
         with:
           python-version: '3.11'
 
@@ -37,5 +39,4 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: .
-          include_files: rapport_*.html
-          destination_dir: rapport
+          publish_branch: gh-pages

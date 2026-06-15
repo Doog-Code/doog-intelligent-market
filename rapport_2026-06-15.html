@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Doog Intelligent Market — 15/06/2026</title>
+<style>
+:root{--bg:#0a0c0f;--bg2:#111418;--bg3:#161b22;--bg4:#1c2230;
+--border:rgba(255,255,255,0.08);--border2:rgba(255,255,255,0.15);
+--text:#e8edf2;--text2:#8b95a3;--text3:#5a6475;
+--neon:#00e5ff;--neon2:#7c4dff;--green:#00c896;--red:#ff4d6a;
+--amber:#ffb020;--purple:#a78bfa;
+--font:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+--mono:'JetBrains Mono','Fira Code','Courier New',monospace;--max:860px}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--text);font-family:var(--font);font-size:14px;line-height:1.55}
+.wrap{max-width:var(--max);margin:0 auto}
+.header{background:var(--bg2);border-bottom:1px solid var(--border2);position:sticky;top:0;z-index:100}
+.header-inner{max-width:var(--max);margin:0 auto;padding:12px 20px 10px}
+.header-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.logo{display:flex;align-items:center;gap:10px}
+.logo-mark{width:34px;height:34px;border-radius:8px;background:linear-gradient(135deg,var(--neon),var(--neon2));display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:800;color:#000}
+.logo-name{font-size:16px;font-weight:700}
+.logo-tag{font-size:10px;color:var(--text3);letter-spacing:1.5px;text-transform:uppercase;margin-top:1px}
+.live-pill{display:inline-flex;align-items:center;gap:5px;background:rgba(0,200,150,0.1);border:1px solid rgba(0,200,150,0.25);border-radius:20px;padding:2px 8px;margin-bottom:4px}
+.live-dot{width:6px;height:6px;border-radius:50%;background:var(--green);animation:blink 2s infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+.live-text{font-size:10px;color:var(--green)}
+.header-date{font-size:11px;color:var(--text3);font-family:var(--mono)}
+.nav{display:flex;gap:4px;overflow-x:auto;scrollbar-width:none;padding-bottom:2px}
+.nav::-webkit-scrollbar{display:none}
+.nb{background:none;border:1px solid var(--border);color:var(--text3);font-size:11px;padding:4px 12px;border-radius:20px;cursor:pointer;white-space:nowrap;transition:all .15s;flex-shrink:0;font-family:var(--font)}
+.nb.on{background:rgba(0,229,255,0.1);border-color:rgba(0,229,255,0.35);color:var(--neon)}
+.neon-rule{height:1px;background:linear-gradient(90deg,transparent,rgba(0,229,255,.25),transparent)}
+.section{padding:20px;border-bottom:1px solid var(--border)}
+.slabel{font-size:9px;letter-spacing:2.5px;text-transform:uppercase;color:var(--text3);margin-bottom:14px;display:flex;align-items:center;gap:10px}
+.slabel::after{content:'';flex:1;height:1px;background:var(--border)}
+.summary-block{border-left:2px solid var(--neon);padding-left:14px}
+.summary-line{font-size:13px;display:flex;gap:8px;align-items:baseline;padding:5px 0;border-bottom:1px solid var(--border)}
+.summary-line:last-child{border-bottom:none}
+.sum-tick{font-size:11px;font-weight:700;font-family:var(--mono);color:var(--neon);min-width:52px;flex-shrink:0}
+.sum-val{font-weight:600}.sum-note{color:var(--text3);font-size:12px}
+.up{color:var(--green)}.dn{color:var(--red)}
+.interp-block{background:var(--bg4);border-left:3px solid var(--neon);border-radius:0 8px 8px 0;padding:13px 15px;margin-bottom:14px}
+.interp-label{font-size:9px;color:var(--text3);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:7px}
+.interp-text{font-size:12px;color:var(--text2);line-height:1.75}
+.news-card{background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:13px 14px;margin-bottom:10px}
+.nc-top{display:flex;align-items:flex-start;justify-content:space-between;gap:8px;margin-bottom:7px}
+.badge{font-size:9px;font-weight:700;letter-spacing:1px;text-transform:uppercase;padding:2px 7px;border-radius:3px;white-space:nowrap}
+.b-crit{background:rgba(255,77,106,.18);color:var(--red)}
+.b-imp{background:rgba(255,176,32,.14);color:var(--amber)}
+.nc-meta{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.nc-source{font-size:10px;color:var(--text3);font-family:var(--mono)}
+.src-link{font-size:10px;color:var(--neon);text-decoration:none;border-bottom:1px solid rgba(0,229,255,0.3)}
+.nc-title{font-size:13px;font-weight:600;color:var(--text);margin-bottom:5px;line-height:1.4}
+.nc-body{font-size:12px;color:var(--text2);line-height:1.6}
+.nc-foot{display:flex;align-items:center;justify-content:space-between;margin-top:8px}
+.nc-time{font-size:10px;color:var(--text3);font-family:var(--mono)}
+.nc-age{font-size:9px;padding:1px 6px;border-radius:3px;background:var(--bg4);color:var(--text3)}
+.mcat{font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:1.5px;margin:16px 0 10px}
+.mcat:first-child{margin-top:0}
+.mgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(155px,1fr));gap:8px}
+.mc{background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:11px 13px}
+.mc-name{font-size:12px;font-weight:700;color:var(--neon);font-family:var(--mono)}
+.mc-label{font-size:10px;color:var(--text3);margin-bottom:4px}
+.mc-price{font-size:16px;font-weight:700;font-family:var(--mono);line-height:1.2}
+.mc-row{display:flex;align-items:center;justify-content:space-between;margin-top:4px}
+.mc-chg{font-size:12px;font-family:var(--mono);font-weight:600}
+.mbar{height:2px;background:var(--bg4);border-radius:1px;overflow:hidden;margin-top:7px}
+.mbar-f{height:100%;border-radius:1px}
+.empty{color:var(--text3);font-size:12px;font-style:italic}
+.footer{padding:24px 20px;text-align:center;max-width:var(--max);margin:0 auto}
+.footer-name{font-size:13px;font-weight:600;color:var(--text2);margin-bottom:4px}
+.footer-src{font-size:10px;color:var(--text3);margin-bottom:6px}
+.footer-disc{font-size:10px;color:var(--text3);font-style:italic}
+.stb{position:fixed;bottom:20px;right:20px;width:38px;height:38px;border-radius:50%;background:var(--bg3);border:1px solid var(--border2);color:var(--text2);font-size:16px;display:flex;align-items:center;justify-content:center;cursor:pointer;opacity:0;transition:opacity .2s;z-index:50}
+.stb.on{opacity:1}
+</style>
+</head>
+<body>
+<div class="header"><div class="header-inner">
+  <div class="header-top">
+    <div class="logo">
+      <div class="logo-mark">D</div>
+      <div><div class="logo-name">Doog Intelligent Market</div>
+      <div class="logo-tag">Intelligence Financière · v1</div></div>
+    </div>
+    <div style="text-align:right">
+      <div class="live-pill"><span class="live-dot"></span>
+      <span class="live-text">Données réelles</span></div>
+      <div class="header-date">Monday 15 june 2026 · 12:39</div>
+    </div>
+  </div>
+  <div class="nav">
+    <button class="nb on" onclick="go('s1',this)">Résumé</button>
+    <button class="nb" onclick="go('s2',this)">Critique (5)</button>
+    <button class="nb" onclick="go('s3',this)">Important (3)</button>
+    <button class="nb" onclick="go('s4',this)">Marchés</button>
+  </div>
+</div></div>
+<div class="neon-rule"></div>
+<div class="wrap">
+
+  <div class="section" id="s1">
+    <div class="slabel">01 · Résumé exécutif</div>
+    
+    <div class="summary-block"><div class="summary-line">
+      <span class="sum-tick">BTC</span>
+      <span class="sum-text">
+        <span class="sum-val up">$66,254 (+3.03%)</span> 
+      </span>
+    </div><div class="summary-line">
+      <span class="sum-tick">ETH</span>
+      <span class="sum-text">
+        <span class="sum-val up">$1,765 (+5.86%)</span> 
+      </span>
+    </div><div class="summary-line">
+      <span class="sum-tick">SOL</span>
+      <span class="sum-text">
+        <span class="sum-val up">$72.46 (+6.72%)</span> 
+      </span>
+    </div><div class="summary-line">
+      <span class="sum-tick">DXY</span>
+      <span class="sum-text">
+        <span class="sum-val dn">$99.54 (-0.21%)</span> <span class="sum-note">— Dollar en repli — favorable aux actifs</span>
+      </span>
+    </div><div class="summary-line">
+      <span class="sum-tick">Or</span>
+      <span class="sum-text">
+        <span class="sum-val up">$4,356 (+2.76%)</span> <span class="sum-note">— Valeur refuge recherchée</span>
+      </span>
+    </div><div class="summary-line">
+      <span class="sum-tick">VIX</span>
+      <span class="sum-text">
+        <span class="sum-val dn">$16.67 (-5.71%)</span> <span class="sum-note">— Peur en baisse — marchés sereins</span>
+      </span>
+    </div><div class="summary-line">
+      <span class="sum-tick">S&P500</span>
+      <span class="sum-text">
+        <span class="sum-val up">$7,431 (+2.26%)</span> 
+      </span>
+    </div><div class="summary-line">
+      <span class="sum-tick">IBIT</span>
+      <span class="sum-text">
+        <span class="sum-val up">$36.04 (+2.74%)</span> <span class="sum-note">— ETF BlackRock · baromètre institutionnel</span>
+      </span>
+    </div></div>
+  </div>
+
+  <div class="section" id="s2">
+    <div class="slabel">02 · Actualités critiques</div>
+    <div class="news-card">
+      <div class="nc-top">
+        <span class="badge b-crit">Critique</span>
+        <div class="nc-meta">
+          <span class="nc-source">CoinTelegraph</span>
+          <a class="src-link" href="https://cointelegraph.com/news/amazon-warning-triggered-us-crackdown-on-anthropic-ai-models-reports?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound" target="_blank">→ Source originale</a>
+        </div>
+      </div>
+      <div class="nc-title">Amazon warning triggered US crackdown on Anthropic AI models: Reports</div>
+      <div class="nc-body">Calls from Amazon CEO Andy Jassy and other tech firms prompted the Trump administration to suspend foreign access to Anthropic’s Fable 5 and Mythos 5 AI models on Friday.</div>
+      <div class="nc-foot">
+        <span class="nc-time">2026-06-14 03:36</span>
+        <span class="nc-age"></span>
+      </div>
+    </div><div class="news-card">
+      <div class="nc-top">
+        <span class="badge b-crit">Critique</span>
+        <div class="nc-meta">
+          <span class="nc-source">CoinTelegraph</span>
+          <a class="src-link" href="https://cointelegraph.com/news/ethereum-quantum-proof-accounts-7-cents-researcher?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound" target="_blank">→ Source originale</a>
+        </div>
+      </div>
+      <div class="nc-title">Ethereum can quantum-proof accounts for just 7 cents, says Ethereum's Kohaku lead</div>
+      <div class="nc-body">The SPHINCS- proposal aims to reduce the cost of post-quantum signature verification on Ethereum while the network works toward a longer-term solution.</div>
+      <div class="nc-foot">
+        <span class="nc-time">2026-06-14 13:49</span>
+        <span class="nc-age"></span>
+      </div>
+    </div><div class="news-card">
+      <div class="nc-top">
+        <span class="badge b-crit">Critique</span>
+        <div class="nc-meta">
+          <span class="nc-source">CoinTelegraph</span>
+          <a class="src-link" href="https://cointelegraph.com/news/bitcoin-mining-difficulty-drops-10-in-11th-largest-downward-adjustment?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound" target="_blank">→ Source originale</a>
+        </div>
+      </div>
+      <div class="nc-title">Bitcoin mining difficulty drops 10% in 11th largest downward adjustment</div>
+      <div class="nc-body">Bitcoin mining difficulty has undergone its second-largest downward difficulty adjustment this year, following February’s 11% shift.</div>
+      <div class="nc-foot">
+        <span class="nc-time">2026-06-15 04:16</span>
+        <span class="nc-age"></span>
+      </div>
+    </div><div class="news-card">
+      <div class="nc-top">
+        <span class="badge b-crit">Critique</span>
+        <div class="nc-meta">
+          <span class="nc-source">CoinTelegraph</span>
+          <a class="src-link" href="https://cointelegraph.com/news/bitbank-japan-crackdown-polymarket-linked-transfers?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound" target="_blank">→ Source originale</a>
+        </div>
+      </div>
+      <div class="nc-title">Japan’s Bitbank cracks down on Polymarket-linked transfers</div>
+      <div class="nc-body">Japanese crypto exchange Bitbank warns users of possible account suspensions for Polymarket-linked transactions, citing Japan’s gambling laws.</div>
+      <div class="nc-foot">
+        <span class="nc-time">2026-06-15 10:05</span>
+        <span class="nc-age"></span>
+      </div>
+    </div><div class="news-card">
+      <div class="nc-top">
+        <span class="badge b-crit">Critique</span>
+        <div class="nc-meta">
+          <span class="nc-source">TheBlock</span>
+          <a class="src-link" href="https://www.theblock.co/post/404662/former-sec-chair-gensler-rejects-cftc-claim-authority-prediction-market-sports-betting?utm_source=rss&utm_medium=rss" target="_blank">→ Source originale</a>
+        </div>
+      </div>
+      <div class="nc-title">Former SEC Chair Gensler rejects CFTC claim of authority over prediction market sports betting</div>
+      <div class="nc-body">Gary Gensler is calling malarkey the claim that the CFTC has jurisdiction over prediction markets, specifically sports bets.</div>
+      <div class="nc-foot">
+        <span class="nc-time">2026-06-12 17:49</span>
+        <span class="nc-age"></span>
+      </div>
+    </div>
+  </div>
+
+  <div class="section" id="s3">
+    <div class="slabel">03 · Actualités importantes</div>
+    <div class="news-card">
+      <div class="nc-top">
+        <span class="badge b-imp">Important</span>
+        <div class="nc-meta">
+          <span class="nc-source">CoinTelegraph</span>
+          <a class="src-link" href="https://cointelegraph.com/news/saylor-strategys-bitcoin-sale-defend-digital-credit-products?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound" target="_blank">→ Source originale</a>
+        </div>
+      </div>
+      <div class="nc-title">Bitcoin sales are necessary for Strategy's digital credit business, Saylor says</div>
+      <div class="nc-body">Strategy's recent Bitcoin sale appeared to clash with Saylor's “never sell” mantra, but he says the move reflects how the company's digital credit business works.</div>
+      <div class="nc-foot">
+        <span class="nc-time">2026-06-13 13:58</span>
+        <span class="nc-age"></span>
+      </div>
+    </div><div class="news-card">
+      <div class="nc-top">
+        <span class="badge b-imp">Important</span>
+        <div class="nc-meta">
+          <span class="nc-source">CoinTelegraph</span>
+          <a class="src-link" href="https://cointelegraph.com/news/trump-says-iran-peace-deal-to-be-signed-sunday-contradicting-tehran?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound" target="_blank">→ Source originale</a>
+        </div>
+      </div>
+      <div class="nc-title">Trump says Iran peace deal to be signed Sunday, contradicting Tehran</div>
+      <div class="nc-body">Crypto analyst Michaël van de Poppe said a peace deal, which would reopen the Strait of Hormuz, would likely send liquidity back to risk-on assets such as cryptocurrencies.</div>
+      <div class="nc-foot">
+        <span class="nc-time">2026-06-14 05:07</span>
+        <span class="nc-age"></span>
+      </div>
+    </div><div class="news-card">
+      <div class="nc-top">
+        <span class="badge b-imp">Important</span>
+        <div class="nc-meta">
+          <span class="nc-source">CoinTelegraph</span>
+          <a class="src-link" href="https://cointelegraph.com/markets/bitcoin-nears-65k-as-trump-says-hormuz-will-open-to-all-in-sunday-iran-peace-deal?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound" target="_blank">→ Source originale</a>
+        </div>
+      </div>
+      <div class="nc-title">Bitcoin nears $65K as Trump says Hormuz will 'open to all' in Sunday Iran peace deal</div>
+      <div class="nc-body">Bitcoin stayed near local highs on a new US-Iran peace deal pledge as analysis saw conditions favoring a sustained BTC price rebound.</div>
+      <div class="nc-foot">
+        <span class="nc-time">2026-06-14 10:06</span>
+        <span class="nc-age"></span>
+      </div>
+    </div>
+  </div>
+
+  <div class="section" id="s4">
+    <div class="slabel">04 · Cartographie des marchés</div>
+    <div class="mcat">Crypto</div>
+    
+    <div class="mgrid"><div class="mc">
+      <div class="mc-name">BTC</div>
+      <div class="mc-label">BTC</div>
+      <div class="mc-price">$66,254</div>
+      <div class="mc-row">
+        <span class="mc-chg up">▲ +3.03%</span>
+        <a class="src-link" href="https://www.coingecko.com/en/coins/bitcoin" target="_blank">↗</a>
+      </div>
+      <div class="mbar"><div class="mbar-f" style="width:24%;background:var(--green)"></div></div>
+    </div><div class="mc">
+      <div class="mc-name">ETH</div>
+      <div class="mc-label">ETH</div>
+      <div class="mc-price">$1,765</div>
+      <div class="mc-row">
+        <span class="mc-chg up">▲ +5.86%</span>
+        <a class="src-link" href="https://www.coingecko.com/en/coins/ethereum" target="_blank">↗</a>
+      </div>
+      <div class="mbar"><div class="mbar-f" style="width:47%;background:var(--green)"></div></div>
+    </div><div class="mc">
+      <div class="mc-name">SOL</div>
+      <div class="mc-label">SOL</div>
+      <div class="mc-price">$72.46</div>
+      <div class="mc-row">
+        <span class="mc-chg up">▲ +6.72%</span>
+        <a class="src-link" href="https://www.coingecko.com/en/coins/solana" target="_blank">↗</a>
+      </div>
+      <div class="mbar"><div class="mbar-f" style="width:54%;background:var(--green)"></div></div>
+    </div></div>
+    <div class="mcat">ETF Bitcoin Spot</div>
+    
+    <div class="mgrid"><div class="mc">
+      <div class="mc-name">ARKB</div>
+      <div class="mc-label">ARKB</div>
+      <div class="mc-price">$21.08</div>
+      <div class="mc-row">
+        <span class="mc-chg up">▲ +2.73%</span>
+        <a class="src-link" href="https://finance.yahoo.com/quote/ARKB" target="_blank">↗</a>
+      </div>
+      <div class="mbar"><div class="mbar-f" style="width:22%;background:var(--green)"></div></div>
+    </div><div class="mc">
+      <div class="mc-name">BITB</div>
+      <div class="mc-label">BITB</div>
+      <div class="mc-price">$34.52</div>
+      <div class="mc-row">
+        <span class="mc-chg up">▲ +2.71%</span>
+        <a class="src-link" href="https://finance.yahoo.com/quote/BITB" target="_blank">↗</a>
+      </div>
+      <div class="mbar"><div class="mbar-f" style="width:22%;background:var(--green)"></div></div>
+    </div><div class="mc">
+      <div class="mc-name">FBTC</div>
+      <div class="mc-label">FBTC</div>
+      <div class="mc-price">$55.35</div>
+      <div class="mc-row">
+        <span class="mc-chg up">▲ +2.73%</span>
+        <a class="src-link" href="https://finance.yahoo.com/quote/FBTC" target="_blank">↗</a>
+      </div>
+      <div class="mbar"><div class="mbar-f" style="width:22%;background:var(--green)"></div></div>
+    </div><div class="mc">
+      <div class="mc-name">HODL</div>
+      <div class="mc-label">HODL</div>
+      <div class="mc-price">$17.97</div>
+      <div class="mc-row">
+        <span class="mc-chg up">▲ +2.69%</span>
+        <a class="src-link" href="https://finance.yahoo.com/quote/HODL" target="_blank">↗</a>
+      </div>
+      <div class="mbar"><div class="mbar-f" style="width:21%;background:var(--green)"></div></div>
+    </div><div class="mc">
+      <div class="mc-name">IBIT</div>
+      <div class="mc-label">IBIT</div>
+      <div class="mc-price">$36.04</div>
+      <div class="mc-row">
+        <span class="mc-chg up">▲ +2.74%</span>
+        <a class="src-link" href="https://finance.yahoo.com/quote/IBIT" target="_blank">↗</a>
+      </div>
+      <div class="mbar"><div class="mbar-f" style="width:22%;background:var(--green)"></div></div>
+    </div></div>
+    <div class="mcat">Macro mondiale</div>
+    
+    <div class="mgrid"><div class="mc">
+      <div class="mc-name">CAC40</div>
+      <div class="mc-label">CAC 40</div>
+      <div class="mc-price">$8,458</div>
+      <div class="mc-row">
+        <span class="mc-chg up">▲ +1.28%</span>
+        <a class="src-link" href="https://finance.yahoo.com/quote/^FCHI" target="_blank">↗</a>
+      </div>
+      <div class="mbar"><div class="mbar-f" style="width:10%;background:var(--green)"></div></div>
+    </div><div class="mc">
+      <div class="mc-name">SP500</div>
+      <div class="mc-label">S&P 500</div>
+      <div class="mc-price">$7,431</div>
+      <div class="mc-row">
+        <span class="mc-chg up">▲ +2.26%</span>
+        <a class="src-link" href="https://finance.yahoo.com/quote/^GSPC" target="_blank">↗</a>
+      </div>
+      <div class="mbar"><div class="mbar-f" style="width:18%;background:var(--green)"></div></div>
+    </div><div class="mc">
+      <div class="mc-name">Nasdaq</div>
+      <div class="mc-label">Nasdaq Composite</div>
+      <div class="mc-price">$25,889</div>
+      <div class="mc-row">
+        <span class="mc-chg up">▲ +2.86%</span>
+        <a class="src-link" href="https://finance.yahoo.com/quote/^IXIC" target="_blank">↗</a>
+      </div>
+      <div class="mbar"><div class="mbar-f" style="width:23%;background:var(--green)"></div></div>
+    </div><div class="mc">
+      <div class="mc-name">Nikkei</div>
+      <div class="mc-label">Nikkei 225</div>
+      <div class="mc-price">$69,318</div>
+      <div class="mc-row">
+        <span class="mc-chg up">▲ +4.99%</span>
+        <a class="src-link" href="https://finance.yahoo.com/quote/^N225" target="_blank">↗</a>
+      </div>
+      <div class="mbar"><div class="mbar-f" style="width:40%;background:var(--green)"></div></div>
+    </div><div class="mc">
+      <div class="mc-name">EuroStoxx</div>
+      <div class="mc-label">EuroStoxx 50</div>
+      <div class="mc-price">$6,267</div>
+      <div class="mc-row">
+        <span class="mc-chg up">▲ +1.29%</span>
+        <a class="src-link" href="https://finance.yahoo.com/quote/^STOXX50E" target="_blank">↗</a>
+      </div>
+      <div class="mbar"><div class="mbar-f" style="width:10%;background:var(--green)"></div></div>
+    </div><div class="mc">
+      <div class="mc-name">DXY</div>
+      <div class="mc-label">DXY — Dollar Index</div>
+      <div class="mc-price">$99.54</div>
+      <div class="mc-row">
+        <span class="mc-chg dn">▼ -0.21%</span>
+        <a class="src-link" href="https://finance.yahoo.com/quote/DX-Y.NYB" target="_blank">↗</a>
+      </div>
+      <div class="mbar"><div class="mbar-f" style="width:2%;background:var(--red)"></div></div>
+    </div><div class="mc">
+      <div class="mc-name">EUR/USD</div>
+      <div class="mc-label">EUR/USD</div>
+      <div class="mc-price">$1.16</div>
+      <div class="mc-row">
+        <span class="mc-chg up">▲ +0.32%</span>
+        <a class="src-link" href="https://finance.yahoo.com/quote/EURUSD=X" target="_blank">↗</a>
+      </div>
+      <div class="mbar"><div class="mbar-f" style="width:3%;background:var(--green)"></div></div>
+    </div><div class="mc">
+      <div class="mc-name">GBP/USD</div>
+      <div class="mc-label">GBP/USD</div>
+      <div class="mc-price">$1.34</div>
+      <div class="mc-row">
+        <span class="mc-chg up">▲ +0.05%</span>
+        <a class="src-link" href="https://finance.yahoo.com/quote/GBPUSD=X" target="_blank">↗</a>
+      </div>
+      <div class="mbar"><div class="mbar-f" style="width:0%;background:var(--green)"></div></div>
+    </div><div class="mc">
+      <div class="mc-name">USD/JPY</div>
+      <div class="mc-label">USD/JPY</div>
+      <div class="mc-price">$160.16</div>
+      <div class="mc-row">
+        <span class="mc-chg up">▲ +0.02%</span>
+        <a class="src-link" href="https://finance.yahoo.com/quote/JPY=X" target="_blank">↗</a>
+      </div>
+      <div class="mbar"><div class="mbar-f" style="width:0%;background:var(--green)"></div></div>
+    </div><div class="mc">
+      <div class="mc-name">Brent</div>
+      <div class="mc-label">Pétrole Brent</div>
+      <div class="mc-price">$83.00</div>
+      <div class="mc-row">
+        <span class="mc-chg dn">▼ -4.96%</span>
+        <a class="src-link" href="https://finance.yahoo.com/quote/BZ=F" target="_blank">↗</a>
+      </div>
+      <div class="mbar"><div class="mbar-f" style="width:40%;background:var(--red)"></div></div>
+    </div><div class="mc">
+      <div class="mc-name">WTI</div>
+      <div class="mc-label">Pétrole WTI</div>
+      <div class="mc-price">$80.20</div>
+      <div class="mc-row">
+        <span class="mc-chg dn">▼ -5.51%</span>
+        <a class="src-link" href="https://finance.yahoo.com/quote/CL=F" target="_blank">↗</a>
+      </div>
+      <div class="mbar"><div class="mbar-f" style="width:44%;background:var(--red)"></div></div>
+    </div><div class="mc">
+      <div class="mc-name">Or</div>
+      <div class="mc-label">Or XAU/USD</div>
+      <div class="mc-price">$4,356</div>
+      <div class="mc-row">
+        <span class="mc-chg up">▲ +2.76%</span>
+        <a class="src-link" href="https://finance.yahoo.com/quote/GC=F" target="_blank">↗</a>
+      </div>
+      <div class="mbar"><div class="mbar-f" style="width:22%;background:var(--green)"></div></div>
+    </div><div class="mc">
+      <div class="mc-name">Argent</div>
+      <div class="mc-label">Argent XAG/USD</div>
+      <div class="mc-price">$70.83</div>
+      <div class="mc-row">
+        <span class="mc-chg up">▲ +4.20%</span>
+        <a class="src-link" href="https://finance.yahoo.com/quote/SI=F" target="_blank">↗</a>
+      </div>
+      <div class="mbar"><div class="mbar-f" style="width:34%;background:var(--green)"></div></div>
+    </div><div class="mc">
+      <div class="mc-name">US3M</div>
+      <div class="mc-label">US 3M Yield</div>
+      <div class="mc-price">$3.62</div>
+      <div class="mc-row">
+        <span class="mc-chg dn">▼ -0.08%</span>
+        <a class="src-link" href="https://finance.yahoo.com/quote/^IRX" target="_blank">↗</a>
+      </div>
+      <div class="mbar"><div class="mbar-f" style="width:1%;background:var(--red)"></div></div>
+    </div><div class="mc">
+      <div class="mc-name">US10Y</div>
+      <div class="mc-label">US 10Y Yield</div>
+      <div class="mc-price">$4.46</div>
+      <div class="mc-row">
+        <span class="mc-chg dn">▼ -0.67%</span>
+        <a class="src-link" href="https://finance.yahoo.com/quote/^TNX" target="_blank">↗</a>
+      </div>
+      <div class="mbar"><div class="mbar-f" style="width:5%;background:var(--red)"></div></div>
+    </div><div class="mc">
+      <div class="mc-name">VIX</div>
+      <div class="mc-label">VIX — Indice de peur</div>
+      <div class="mc-price">$16.67</div>
+      <div class="mc-row">
+        <span class="mc-chg dn">▼ -5.71%</span>
+        <a class="src-link" href="https://finance.yahoo.com/quote/^VIX" target="_blank">↗</a>
+      </div>
+      <div class="mbar"><div class="mbar-f" style="width:46%;background:var(--red)"></div></div>
+    </div></div>
+  </div>
+
+  <div class="section" id="s5">
+    <div class="slabel">05 · Opportunités du jour</div>
+    <div style="font-size:11px;color:var(--text3);margin-bottom:14px;
+      line-height:1.6;border-left:2px solid var(--border);padding-left:10px">
+      Chaque opportunité nécessite minimum 3 facteurs concordants.
+      Le <strong style="color:var(--text2)">R/R</strong> indique le ratio
+      Rendement/Risque : "1:3" = pour 1$ risqué, 3$ visés.
+      Zéro opportunité = marchés sans signal clair ce jour.
+    </div>
+    <div style="
+            background:var(--bg3);border:1px solid var(--border);
+            border-radius:10px;padding:20px;text-align:center;
+            color:var(--text3);font-size:13px;font-style:italic;">
+            Aucune opportunité détectée aujourd'hui.<br>
+            <span style="font-size:11px">Le marché ne présente pas de signal suffisamment clair — patience.</span>
+        </div>
+  </div>
+
+  <div class="section" id="s6">
+    <div class="slabel">06 · Suivi des performances</div>
+    <div style="color:var(--text3);font-size:12px;
+            font-style:italic;padding:10px 0">
+            Historique vide — les premières opportunités sont en cours de suivi.</div><div style="color:var(--text3);font-size:12px;font-style:italic;
+            padding:10px 0">Les premières opportunités générées aujourd'hui
+            seront suivies ici dès demain.</div>
+  </div>
+
+</div>
+<div class="footer">
+  <div class="footer-name">Doog Intelligent Market · v1</div>
+  <div class="footer-src">Sources : CoinGecko · Yahoo Finance · TheBlock · CoinTelegraph · Federal Reserve · BCE</div>
+  <div class="footer-disc">Rapport généré le Monday 15 june 2026 · 12:39 · Usage personnel · Pas un conseil en investissement</div>
+</div>
+<div class="stb" id="stb" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</div>
+<script>
+function go(id,btn){
+  const el=document.getElementById(id);if(!el)return;
+  const hh=document.querySelector('.header').offsetHeight+10;
+  window.scrollTo({top:el.getBoundingClientRect().top+scrollY-hh,behavior:'smooth'});
+  document.querySelectorAll('.nb').forEach(b=>b.classList.remove('on'));
+  btn.classList.add('on');
+}
+window.addEventListener('scroll',()=>{
+  document.getElementById('stb').classList.toggle('on',scrollY>300);
+  const hh=document.querySelector('.header').offsetHeight+30;
+  const ids=['s1','s2','s3','s5','s4','s6'];
+  const btns=document.querySelectorAll('.nb');
+  let cur=0;
+  ids.forEach((id,i)=>{
+    const el=document.getElementById(id);
+    if(el&&el.getBoundingClientRect().top<=hh)cur=i;
+  });
+  btns.forEach((b,i)=>b.classList.toggle('on',i===cur));
+});
+</script>
+</body></html>

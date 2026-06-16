@@ -35,11 +35,8 @@ jobs:
       - name: Crée le dossier de publication et index.html
         run: |
           mkdir -p public
-          # Copie le rapport dans public/
           cp rapport_*.html public/
-          # Trouve le nom du rapport du jour
           RAPPORT=$(ls rapport_*.html | head -1)
-          # Crée index.html qui redirige automatiquement
           cat > public/index.html << HTML
           <!DOCTYPE html>
           <html>
@@ -60,3 +57,14 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: public
           publish_branch: gh-pages
+
+      - name: Notification NTFY
+        run: |
+          DATE=$(date '+%d/%m/%Y')
+          curl -X POST \
+            -H "Title: 📊 Doog Intelligent Market — $DATE" \
+            -H "Priority: default" \
+            -H "Click: https://doog-code.github.io/doog-intelligent-market/" \
+            -H "Tags: chart_with_upwards_trend" \
+            -d "Rapport du $DATE disponible — marchés, analyses et opportunités" \
+            https://ntfy.sh/${{ secrets.NTFY_TOPIC }}

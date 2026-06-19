@@ -33,6 +33,30 @@ FEEDS = [
         "source":     "CoinTelegraph",
         "category":   "crypto",
         "importance": "IMPORTANT"
+    },   
+    {
+        "url":        "https://www.lemonde.fr/economie/rss_full.xml",
+        "source":     "Le Monde Économie",
+        "category":   "macro",
+        "importance": "IMPORTANT"
+    },
+    {
+        "url":        ""  # désactivé — flux protégé,
+        "source":     "Les Échos",
+        "category":   "macro",
+        "importance": "IMPORTANT"
+    },
+    {
+        "url":        ""  # désactivé — 404,
+        "source":     "AMF",
+        "category":   "regulation",
+        "importance": "CRITIQUE"
+    },
+    {
+        "url":        "https://www.esma.europa.eu/rss.xml",
+        "source":     "ESMA",
+        "category":   "regulation",
+        "importance": "CRITIQUE"
     },
 ]
 

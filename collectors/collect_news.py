@@ -60,11 +60,21 @@ CRYPTO_KEYWORDS = [
     "stablecoin","etf","blockchain","binance","coinbase","blackrock"
 ]
 
-def classify(title, summary, category):
+def classify(title, summary, category, feed_importance="IMPORTANT"):
     text = (title + " " + summary).lower()
-    for kw in CRITICAL_KEYWORDS:
+    # Keywords vraiment critiques — priorité absolue
+    hard_critical = [
+        "fed","federal reserve","fomc","powell","bce","lagarde","ecb",
+        "rate decision","rate cut","rate hike","emergency","crash","crisis",
+        "recession","default","war","sanction","bitcoin etf","btc etf","sec"
+    ]
+    for kw in hard_critical:
         if kw in text:
             return "CRITIQUE"
+    # Sources réglementaires : on respecte leur importance par défaut
+    if category in ("banque_centrale","regulation"):
+        return feed_importance
+    # Crypto : filtre par keywords
     if category == "crypto":
         for kw in CRYPTO_KEYWORDS:
             if kw in text:
@@ -121,7 +131,7 @@ def collect():
                 title   = re.sub(r'<[^>]+>', '', title).strip()
                 summary = re.sub(r'<[^>]+>', '', summary).strip()
 
-                importance = classify(title, summary, category)
+                importance = classify(title, summary, category, feed_config.get("importance","IMPORTANT"))
 
                 if importance == "BRUIT":
                     stats["BRUIT"] += 1

@@ -462,6 +462,21 @@ def generate_report(market_data, news_items, interpretations, opportunities=[], 
         for t,d in market_data.items()
         if d["source"].startswith("yahoo_") and t not in ETF_LIST
     ])
+    # Napoléon 20F — récupération directe depuis la base
+    import sqlite3 as _sq
+    _conn = _sq.connect(DB_PATH)
+    _row = _conn.execute("""
+        SELECT price, change_24h FROM market_data
+        WHERE asset LIKE '%Napoleon%' AND source = 'bdor.fr'
+        ORDER BY timestamp DESC LIMIT 1
+    """).fetchone()
+    _conn.close()
+    if _row:
+        macro_cards += market_card(
+            "Napoléon 20F",
+            {"name": "Napoléon 20F · bdor.fr", "price": _row[0], "change": _row[1]},
+            "https://www.bdor.fr/produits-d-investissement-or/cours-prix-pieces-d-or/20-francs-napoleon-or"
+        )
 
     # News
     critiques  = [n for n in news_items if n["importance"]=="CRITIQUE"][:5]
@@ -513,7 +528,7 @@ def generate_report(market_data, news_items, interpretations, opportunities=[], 
 --font:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
 --mono:'JetBrains Mono','Fira Code','Courier New',monospace;--max:860px}}
 *{{box-sizing:border-box;margin:0;padding:0}}
-body{{background:var(--bg);color:var(--text);font-family:var(--font);font-size:14px;line-height:1.55}}
+body{{background:var(--bg);color:var(--text);font-family:var(--font);font-size:18px;line-height:1.55}}
 .wrap{{max-width:var(--max);margin:0 auto}}
 .header{{background:var(--bg2);border-bottom:1px solid var(--border2);position:sticky;top:0;z-index:100}}
 .header-inner{{max-width:var(--max);margin:0 auto;padding:12px 20px 10px}}
@@ -536,14 +551,14 @@ body{{background:var(--bg);color:var(--text);font-family:var(--font);font-size:1
 .slabel{{font-size:9px;letter-spacing:2.5px;text-transform:uppercase;color:var(--text3);margin-bottom:14px;display:flex;align-items:center;gap:10px}}
 .slabel::after{{content:'';flex:1;height:1px;background:var(--border)}}
 .summary-block{{border-left:2px solid var(--neon);padding-left:14px}}
-.summary-line{{font-size:13px;display:flex;gap:8px;align-items:baseline;padding:5px 0;border-bottom:1px solid var(--border)}}
+.summary-line{{font-size:18px;display:flex;gap:8px;align-items:baseline;padding:5px 0;border-bottom:1px solid var(--border)}}
 .summary-line:last-child{{border-bottom:none}}
 .sum-tick{{font-size:11px;font-weight:700;font-family:var(--mono);color:var(--neon);min-width:52px;flex-shrink:0}}
 .sum-val{{font-weight:600}}.sum-note{{color:var(--text3);font-size:12px}}
 .up{{color:var(--green)}}.dn{{color:var(--red)}}
 .interp-block{{background:var(--bg4);border-left:3px solid var(--neon);border-radius:0 8px 8px 0;padding:13px 15px;margin-bottom:14px}}
 .interp-label{{font-size:9px;color:var(--text3);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:7px}}
-.interp-text{{font-size:12px;color:var(--text2);line-height:1.75}}
+.interp-text{{font-size:18px;color:var(--text2);line-height:1.75}}
 .news-card{{background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:13px 14px;margin-bottom:10px}}
 .nc-top{{display:flex;align-items:flex-start;justify-content:space-between;gap:8px;margin-bottom:7px}}
 .badge{{font-size:9px;font-weight:700;letter-spacing:1px;text-transform:uppercase;padding:2px 7px;border-radius:3px;white-space:nowrap}}
@@ -552,8 +567,8 @@ body{{background:var(--bg);color:var(--text);font-family:var(--font);font-size:1
 .nc-meta{{display:flex;align-items:center;gap:8px;flex-wrap:wrap}}
 .nc-source{{font-size:10px;color:var(--text3);font-family:var(--mono)}}
 .src-link{{font-size:10px;color:var(--neon);text-decoration:none;border-bottom:1px solid rgba(0,229,255,0.3)}}
-.nc-title{{font-size:13px;font-weight:600;color:var(--text);margin-bottom:5px;line-height:1.4}}
-.nc-body{{font-size:12px;color:var(--text2);line-height:1.6}}
+.nc-title{{font-size:18px;font-weight:600;color:var(--text);margin-bottom:5px;line-height:1.4}}
+.nc-body{{font-size:18px;color:var(--text2);line-height:1.6}}
 .nc-foot{{display:flex;align-items:center;justify-content:space-between;margin-top:8px}}
 .nc-time{{font-size:10px;color:var(--text3);font-family:var(--mono)}}
 .nc-age{{font-size:9px;padding:1px 6px;border-radius:3px;background:var(--bg4);color:var(--text3)}}
@@ -575,6 +590,16 @@ body{{background:var(--bg);color:var(--text);font-family:var(--font);font-size:1
 .footer-disc{{font-size:10px;color:var(--text3);font-style:italic}}
 .stb{{position:fixed;bottom:20px;right:20px;width:38px;height:38px;border-radius:50%;background:var(--bg3);border:1px solid var(--border2);color:var(--text2);font-size:16px;display:flex;align-items:center;justify-content:center;cursor:pointer;opacity:0;transition:opacity .2s;z-index:50}}
 .stb.on{{opacity:1}}
+@media(max-width:600px){{
+body{{font-size:16px}}
+.nc-title{{font-size:16px}}
+.nc-body{{font-size:15px}}
+.interp-text{{font-size:15px}}
+.summary-line{{font-size:15px}}
+.mc-price{{font-size:15px}}
+.nb{{font-size:12px;padding:5px 14px}}
+.section{{padding:14px}}
+}}
 </style>
 </head>
 <body>

@@ -41,18 +41,6 @@ FEEDS = [
         "importance": "IMPORTANT"
     },
     {
-        "url":        ""  # désactivé — flux protégé,
-        "source":     "Les Échos",
-        "category":   "macro",
-        "importance": "IMPORTANT"
-    },
-    {
-        "url":        ""  # désactivé — 404,
-        "source":     "AMF",
-        "category":   "regulation",
-        "importance": "CRITIQUE"
-    },
-    {
         "url":        "https://www.esma.europa.eu/rss.xml",
         "source":     "ESMA",
         "category":   "regulation",

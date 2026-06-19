@@ -13,7 +13,7 @@
 --font:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
 --mono:'JetBrains Mono','Fira Code','Courier New',monospace;--max:860px}
 *{box-sizing:border-box;margin:0;padding:0}
-body{background:var(--bg);color:var(--text);font-family:var(--font);font-size:14px;line-height:1.55}
+body{background:var(--bg);color:var(--text);font-family:var(--font);font-size:18px;line-height:1.55}
 .wrap{max-width:var(--max);margin:0 auto}
 .header{background:var(--bg2);border-bottom:1px solid var(--border2);position:sticky;top:0;z-index:100}
 .header-inner{max-width:var(--max);margin:0 auto;padding:12px 20px 10px}
@@ -36,14 +36,14 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);font-size:14
 .slabel{font-size:9px;letter-spacing:2.5px;text-transform:uppercase;color:var(--text3);margin-bottom:14px;display:flex;align-items:center;gap:10px}
 .slabel::after{content:'';flex:1;height:1px;background:var(--border)}
 .summary-block{border-left:2px solid var(--neon);padding-left:14px}
-.summary-line{font-size:13px;display:flex;gap:8px;align-items:baseline;padding:5px 0;border-bottom:1px solid var(--border)}
+.summary-line{font-size:18px;display:flex;gap:8px;align-items:baseline;padding:5px 0;border-bottom:1px solid var(--border)}
 .summary-line:last-child{border-bottom:none}
 .sum-tick{font-size:11px;font-weight:700;font-family:var(--mono);color:var(--neon);min-width:52px;flex-shrink:0}
 .sum-val{font-weight:600}.sum-note{color:var(--text3);font-size:12px}
 .up{color:var(--green)}.dn{color:var(--red)}
 .interp-block{background:var(--bg4);border-left:3px solid var(--neon);border-radius:0 8px 8px 0;padding:13px 15px;margin-bottom:14px}
 .interp-label{font-size:9px;color:var(--text3);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:7px}
-.interp-text{font-size:12px;color:var(--text2);line-height:1.75}
+.interp-text{font-size:18px;color:var(--text2);line-height:1.75}
 .news-card{background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:13px 14px;margin-bottom:10px}
 .nc-top{display:flex;align-items:flex-start;justify-content:space-between;gap:8px;margin-bottom:7px}
 .badge{font-size:9px;font-weight:700;letter-spacing:1px;text-transform:uppercase;padding:2px 7px;border-radius:3px;white-space:nowrap}
@@ -52,8 +52,8 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);font-size:14
 .nc-meta{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
 .nc-source{font-size:10px;color:var(--text3);font-family:var(--mono)}
 .src-link{font-size:10px;color:var(--neon);text-decoration:none;border-bottom:1px solid rgba(0,229,255,0.3)}
-.nc-title{font-size:13px;font-weight:600;color:var(--text);margin-bottom:5px;line-height:1.4}
-.nc-body{font-size:12px;color:var(--text2);line-height:1.6}
+.nc-title{font-size:18px;font-weight:600;color:var(--text);margin-bottom:5px;line-height:1.4}
+.nc-body{font-size:18px;color:var(--text2);line-height:1.6}
 .nc-foot{display:flex;align-items:center;justify-content:space-between;margin-top:8px}
 .nc-time{font-size:10px;color:var(--text3);font-family:var(--mono)}
 .nc-age{font-size:9px;padding:1px 6px;border-radius:3px;background:var(--bg4);color:var(--text3)}
@@ -75,6 +75,16 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);font-size:14
 .footer-disc{font-size:10px;color:var(--text3);font-style:italic}
 .stb{position:fixed;bottom:20px;right:20px;width:38px;height:38px;border-radius:50%;background:var(--bg3);border:1px solid var(--border2);color:var(--text2);font-size:16px;display:flex;align-items:center;justify-content:center;cursor:pointer;opacity:0;transition:opacity .2s;z-index:50}
 .stb.on{opacity:1}
+@media(max-width:600px){
+body{font-size:16px}
+.nc-title{font-size:16px}
+.nc-body{font-size:15px}
+.interp-text{font-size:15px}
+.summary-line{font-size:15px}
+.mc-price{font-size:15px}
+.nb{font-size:12px;padding:5px 14px}
+.section{padding:14px}
+}
 </style>
 </head>
 <body>
@@ -88,7 +98,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);font-size:14
     <div style="text-align:right">
       <div class="live-pill"><span class="live-dot"></span>
       <span class="live-text">Données réelles</span></div>
-      <div class="header-date">Friday 19 june 2026 · 16:20</div>
+      <div class="header-date">Friday 19 june 2026 · 19:07</div>
     </div>
   </div>
   <div class="nav">
@@ -105,32 +115,32 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);font-size:14
     <div class="slabel">01 · Résumé exécutif</div>
     <div class="interp-block" style="border-left-color:var(--neon)">
       <div class="interp-label">⚡ Analyse Doog · Groq / Llama 3.3</div>
-      <div class="interp-text">Les marchés crypto montrent une légère hausse, avec des gains de 1,25% pour le BTC et de 1,40% pour l'ETH, tandis que les ETF liés au BTC sont en baisse, avec des pertes allant de 4,09% à 4,21%. Le DXY est en hausse de 0,72%, ce qui pourrait expliquer la baisse des ETF, mais le VIX est en baisse de 9,00%, indiquant une diminution de la volatilité. Les actualités récentes de l'ESMA et de CoinTelegraph ne semblent pas avoir un impact direct sur les prix, mais l'avertissement de Microsoft sur le malware "Crypto Clipper" pourrait avoir un effet négatif sur la confiance des investisseurs. Les signaux les plus importants sont la corrélation négative entre les prix crypto et le DXY, ainsi que la baisse du VIX, qui pourraient indiquer une stabilisation des marchés. La réduction de l'objectif de fin d'année pour l'or par Goldman Sachs pourrait également avoir un impact sur les marchés, en particulier sur les investissements dans les actifs refuges.</div>
+      <div class="interp-text">Les marchés crypto montrent une légère hausse, avec le BTC en augmentation de 0,69% et l'ETH de 1,11%, tandis que les ETF liés au BTC sont en baisse, notamment l'ARKB et le BITB, avec des pertes de 4,09% et 4,21% respectivement. Le DXY est en hausse de 0,63%, ce qui pourrait expliquer la baisse des ETF liés au BTC, car une forte monnaie américaine tend à réduire l'appétit pour les actifs à risque. Le VIX, indicateur de volatilité, est en baisse de 9,00%, ce qui pourrait indiquer une diminution de l'incertitude sur les marchés. Les actualités récentes de l'ESMA et de Goldman Sachs, notamment la réduction de la cible de fin d'année pour l'or, pourraient également avoir un impact sur les marchés. Les signaux les plus importants sont la corrélation négative entre le DXY et les ETF liés au BTC, ainsi que la baisse du VIX, qui pourraient indiquer une stabilité relative des marchés.</div>
     </div>
     <div class="summary-block"><div class="summary-line">
       <span class="sum-tick">BTC</span>
       <span class="sum-text">
-        <span class="sum-val up">$63,264 (+1.25%)</span> 
+        <span class="sum-val up">$63,040 (+0.69%)</span> 
       </span>
     </div><div class="summary-line">
       <span class="sum-tick">ETH</span>
       <span class="sum-text">
-        <span class="sum-val up">$1,707 (+1.40%)</span> 
+        <span class="sum-val up">$1,702 (+1.11%)</span> 
       </span>
     </div><div class="summary-line">
       <span class="sum-tick">SOL</span>
       <span class="sum-text">
-        <span class="sum-val up">$69.40 (+1.11%)</span> 
+        <span class="sum-val up">$68.99 (+0.60%)</span> 
       </span>
     </div><div class="summary-line">
       <span class="sum-tick">DXY</span>
       <span class="sum-text">
-        <span class="sum-val up">$100.81 (+0.72%)</span> <span class="sum-note">— Dollar en hausse — pression sur les actifs</span>
+        <span class="sum-val up">$100.72 (+0.63%)</span> <span class="sum-note">— Dollar en hausse — pression sur les actifs</span>
       </span>
     </div><div class="summary-line">
       <span class="sum-tick">Or</span>
       <span class="sum-text">
-        <span class="sum-val dn">$4,164 (-4.47%)</span> 
+        <span class="sum-val dn">$4,173 (-4.27%)</span> 
       </span>
     </div><div class="summary-line">
       <span class="sum-tick">VIX</span>
@@ -160,10 +170,10 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);font-size:14
           <a class="src-link" href="https://www.esma.europa.eu/press-news/esma-news/esma-publishes-shortlist-candidates-position-chair-0" target="_blank">→ Source originale</a>
         </div>
       </div>
-      <div class="nc-title">L'ESMA publie la liste restreinte des candidats pour le poste de président</div>
-      <div class="nc-body">L'ESMA publie la liste restreinte des candidats pour le poste de président</div>
+      <div class="nc-title">L'ESMA publie une liste restreinte de candidats pour le poste de président</div>
+      <div class="nc-body">L'ESMA publie une liste restreinte de candidats pour le poste de président</div>
       <div class="nc-foot">
-        <span class="nc-time">2026-06-19 16:19</span>
+        <span class="nc-time">2026-06-19 19:06</span>
         <span class="nc-age">Il y a 0h</span>
       </div>
     </div><div class="news-card">
@@ -177,7 +187,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);font-size:14
       <div class="nc-title">L'ESMA consulte sur des lignes directrices révisées pour soutenir des allocations et des confirmations plus fluides sous T+1</div>
       <div class="nc-body">L'ESMA consulte sur des lignes directrices révisées pour soutenir des allocations et des confirmations plus fluides sous T+1</div>
       <div class="nc-foot">
-        <span class="nc-time">2026-06-19 16:19</span>
+        <span class="nc-time">2026-06-19 19:06</span>
         <span class="nc-age">Il y a 0h</span>
       </div>
     </div><div class="news-card">
@@ -188,10 +198,10 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);font-size:14
           <a class="src-link" href="https://www.esma.europa.eu/press-news/esma-news/new-qas-available-may-2026" target="_blank">→ Source originale</a>
         </div>
       </div>
-      <div class="nc-title">Nouvelles Q&R disponibles</div>
-      <div class="nc-body">Nouvelles Q&amp;R disponibles</div>
+      <div class="nc-title">Nouvelles Q&amp;A disponibles</div>
+      <div class="nc-body">Nouvelles Q&amp;A disponibles</div>
       <div class="nc-foot">
-        <span class="nc-time">2026-06-19 16:19</span>
+        <span class="nc-time">2026-06-19 19:06</span>
         <span class="nc-age">Il y a 0h</span>
       </div>
     </div><div class="news-card">
@@ -202,10 +212,10 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);font-size:14
           <a class="src-link" href="https://www.esma.europa.eu/press-news/esma-news/esmas-annual-data-report-shows-increased-quality-wider-use-and-digital" target="_blank">→ Source originale</a>
         </div>
       </div>
-      <div class="nc-title">Le rapport annuel de l'ESMA sur les données montre une amélioration de la qualité, une utilisation plus large et des progrès numériques</div>
-      <div class="nc-body">Le rapport annuel de l'ESMA sur les données montre une amélioration de la qualité, une utilisation plus large et des progrès numériques</div>
+      <div class="nc-title">Le rapport annuel de données de l'ESMA montre une qualité accrue, une utilisation plus large et un progrès numérique</div>
+      <div class="nc-body">Le rapport annuel de données de l'ESMA montre une qualité accrue, une utilisation plus large et un progrès numérique</div>
       <div class="nc-foot">
-        <span class="nc-time">2026-06-19 16:19</span>
+        <span class="nc-time">2026-06-19 19:06</span>
         <span class="nc-age">Il y a 0h</span>
       </div>
     </div><div class="news-card">
@@ -219,7 +229,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);font-size:14
       <div class="nc-title">L'ESMA publie la dernière édition de son bulletin d'information</div>
       <div class="nc-body">L'ESMA publie la dernière édition de son bulletin d'information</div>
       <div class="nc-foot">
-        <span class="nc-time">2026-06-19 16:19</span>
+        <span class="nc-time">2026-06-19 19:06</span>
         <span class="nc-age">Il y a 0h</span>
       </div>
     </div>
@@ -235,40 +245,40 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);font-size:14
     <div class="mcat">Crypto</div>
     <div class="interp-block" style="border-left-color:var(--green)">
       <div class="interp-label">⚡ Analyse Doog · Groq / Llama 3.3</div>
-      <div class="interp-text">Le prix du BTC évolue à la hausse (+1,25%) malgré la baisse des ETF liés au BTC (IBIT et FBTC) et la hausse du DXY (+0,72%), ce qui suggère une résilience du marché des cryptomonnaies. Les facteurs concordants incluent la faible volatilité du marché (VIX en baisse de 9,00%) et les annonces positives de la part de l'ESMA, qui pourraient contribuer à une confiance accrue dans le marché. Cependant, les risques identifiés incluent la présence de malware tels que "Crypto Clipper" qui pourraient affecter la sécurité des transactions.</div>
+      <div class="interp-text">Le prix du BTC évolue à la hausse (+0.69%) malgré la baisse des ETF liés au BTC (IBIT : -4.17%, FBTC : -4.13%) et la hausse du DXY (+0.63%), ce qui pourrait indiquer une confiance accrue dans le marché des cryptomonnaies. Les facteurs concordants incluent la baisse du VIX (-9.00%), qui reflète une diminution de la volatilité du marché, et les news récentes sur la réglementation des cryptomonnaies, comme la possibilité pour Binance de servir les traders philippins. Cependant, les risques identifiés incluent la dépendance du marché des cryptomonnaies à l'égard des réglementations et des fluctuations du marché des changes (EURUSD : -0.23%).</div>
     </div>
     <div class="mgrid"><div class="mc">
       <div class="mc-name">BTC</div>
       <div class="mc-label">BTC</div>
-      <div class="mc-price">$63,264</div>
+      <div class="mc-price">$63,040</div>
       <div class="mc-row">
-        <span class="mc-chg up">▲ +1.25%</span>
+        <span class="mc-chg up">▲ +0.69%</span>
         <a class="src-link" href="https://www.coingecko.com/en/coins/bitcoin" target="_blank">↗</a>
       </div>
-      <div class="mbar"><div class="mbar-f" style="width:10%;background:var(--green)"></div></div>
+      <div class="mbar"><div class="mbar-f" style="width:6%;background:var(--green)"></div></div>
     </div><div class="mc">
       <div class="mc-name">ETH</div>
       <div class="mc-label">ETH</div>
-      <div class="mc-price">$1,707</div>
+      <div class="mc-price">$1,702</div>
       <div class="mc-row">
-        <span class="mc-chg up">▲ +1.40%</span>
+        <span class="mc-chg up">▲ +1.11%</span>
         <a class="src-link" href="https://www.coingecko.com/en/coins/ethereum" target="_blank">↗</a>
       </div>
-      <div class="mbar"><div class="mbar-f" style="width:11%;background:var(--green)"></div></div>
+      <div class="mbar"><div class="mbar-f" style="width:9%;background:var(--green)"></div></div>
     </div><div class="mc">
       <div class="mc-name">SOL</div>
       <div class="mc-label">SOL</div>
-      <div class="mc-price">$69.40</div>
+      <div class="mc-price">$68.99</div>
       <div class="mc-row">
-        <span class="mc-chg up">▲ +1.11%</span>
+        <span class="mc-chg up">▲ +0.60%</span>
         <a class="src-link" href="https://www.coingecko.com/en/coins/solana" target="_blank">↗</a>
       </div>
-      <div class="mbar"><div class="mbar-f" style="width:9%;background:var(--green)"></div></div>
+      <div class="mbar"><div class="mbar-f" style="width:5%;background:var(--green)"></div></div>
     </div></div>
     <div class="mcat">ETF Bitcoin Spot</div>
     <div class="interp-block" style="border-left-color:var(--purple)">
       <div class="interp-label">⚡ Analyse Doog · Groq / Llama 3.3</div>
-      <div class="interp-text">Les ETF BTC (IBIT, FBTC, BITB, ARKB, HODL) affichent toutes des baisses, ce qui contraste avec la légère hausse du prix du BTC, indiquant un décalage entre les investissements institutionnels et le marché spot. Cela pourrait s'expliquer par la volatilité macroéconomique, avec une hausse du DXY et une baisse de l'EURUSD, qui pourrait inciter les investisseurs à se désengager des actifs à risque.</div>
+      <div class="interp-text">Les ETF BTC (IBIT, FBTC, BITB, ARKB, HODL) affichent des baisses comprises entre 4,09% et 4,21%, ce qui contraste avec la légère hausse du prix du BTC (+0,69%). Cela suggère une déconnexion temporaire entre les ETF et le prix sous-jacent du Bitcoin, potentiellement influencée par les facteurs macro-économiques et les mouvements des marchés financiers.</div>
     </div>
     <div class="mgrid"><div class="mc">
       <div class="mc-name">ARKB</div>
@@ -319,7 +329,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);font-size:14
     <div class="mcat">Macro mondiale</div>
     <div class="interp-block" style="border-left-color:var(--amber)">
       <div class="interp-label">⚡ Analyse Doog · Groq / Llama 3.3</div>
-      <div class="interp-text">Le contexte macro global ce matin suggère une légère augmentation de l'appétit au risque, avec une hausse du Nasdaq et une stabilité des rendements obligataires (US10Y). Cependant, la montée du DXY et la baisse de l'or et du pétrole suggèrent une certaine prudence, tandis que la baisse du VIX indique une diminution de la volatilité et une confiance accrue des investisseurs. Globalement, les indicateurs macroéconomiques signalent un environnement de marché relativement stable, mais avec des signaux contradictoires sur l'appétit au risque.</div>
+      <div class="interp-text">Le contexte macro global ce matin suggère une légère tendance à l'aversion au risque, avec une hausse du DXY (+0,63%) et une stabilité du taux US10Y (4,45%), tandis que le VIX a baissé (-9,00%). Les baisses de l'or (-4,27%) et du pétrole (-0,33%) suggèrent également une préférence pour les actifs plus sûrs. Cependant, la hausse de certains indices actions comme le Nasdaq (+0,54%) tempère cette tendance, indiquant un appétit au risque encore présent, mais prudent.</div>
     </div>
     <div class="mgrid"><div class="mc">
       <div class="mc-name">CAC40</div>
@@ -369,75 +379,75 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);font-size:14
     </div><div class="mc">
       <div class="mc-name">DXY</div>
       <div class="mc-label">DXY — Dollar Index</div>
-      <div class="mc-price">$100.81</div>
+      <div class="mc-price">$100.72</div>
       <div class="mc-row">
-        <span class="mc-chg up">▲ +0.72%</span>
+        <span class="mc-chg up">▲ +0.63%</span>
         <a class="src-link" href="https://finance.yahoo.com/quote/DX-Y.NYB" target="_blank">↗</a>
       </div>
-      <div class="mbar"><div class="mbar-f" style="width:6%;background:var(--green)"></div></div>
+      <div class="mbar"><div class="mbar-f" style="width:5%;background:var(--green)"></div></div>
     </div><div class="mc">
       <div class="mc-name">EUR/USD</div>
       <div class="mc-label">EUR/USD</div>
       <div class="mc-price">$1.15</div>
       <div class="mc-row">
-        <span class="mc-chg dn">▼ -0.35%</span>
+        <span class="mc-chg dn">▼ -0.23%</span>
         <a class="src-link" href="https://finance.yahoo.com/quote/EURUSD=X" target="_blank">↗</a>
       </div>
-      <div class="mbar"><div class="mbar-f" style="width:3%;background:var(--red)"></div></div>
+      <div class="mbar"><div class="mbar-f" style="width:2%;background:var(--red)"></div></div>
     </div><div class="mc">
       <div class="mc-name">GBP/USD</div>
       <div class="mc-label">GBP/USD</div>
       <div class="mc-price">$1.32</div>
       <div class="mc-row">
-        <span class="mc-chg dn">▼ -0.60%</span>
+        <span class="mc-chg dn">▼ -0.50%</span>
         <a class="src-link" href="https://finance.yahoo.com/quote/GBPUSD=X" target="_blank">↗</a>
       </div>
-      <div class="mbar"><div class="mbar-f" style="width:5%;background:var(--red)"></div></div>
+      <div class="mbar"><div class="mbar-f" style="width:4%;background:var(--red)"></div></div>
     </div><div class="mc">
       <div class="mc-name">USD/JPY</div>
       <div class="mc-label">USD/JPY</div>
-      <div class="mc-price">$161.31</div>
+      <div class="mc-price">$161.25</div>
       <div class="mc-row">
-        <span class="mc-chg up">▲ +0.45%</span>
+        <span class="mc-chg up">▲ +0.41%</span>
         <a class="src-link" href="https://finance.yahoo.com/quote/JPY=X" target="_blank">↗</a>
       </div>
-      <div class="mbar"><div class="mbar-f" style="width:4%;background:var(--green)"></div></div>
+      <div class="mbar"><div class="mbar-f" style="width:3%;background:var(--green)"></div></div>
     </div><div class="mc">
       <div class="mc-name">Brent</div>
       <div class="mc-label">Pétrole Brent</div>
-      <div class="mc-price">$80.67</div>
+      <div class="mc-price">$80.59</div>
       <div class="mc-row">
-        <span class="mc-chg up">▲ +1.41%</span>
+        <span class="mc-chg up">▲ +1.31%</span>
         <a class="src-link" href="https://finance.yahoo.com/quote/BZ=F" target="_blank">↗</a>
       </div>
-      <div class="mbar"><div class="mbar-f" style="width:11%;background:var(--green)"></div></div>
+      <div class="mbar"><div class="mbar-f" style="width:10%;background:var(--green)"></div></div>
     </div><div class="mc">
       <div class="mc-name">WTI</div>
       <div class="mc-label">Pétrole WTI</div>
-      <div class="mc-price">$76.65</div>
+      <div class="mc-price">$76.54</div>
       <div class="mc-row">
-        <span class="mc-chg dn">▼ -0.18%</span>
+        <span class="mc-chg dn">▼ -0.33%</span>
         <a class="src-link" href="https://finance.yahoo.com/quote/CL=F" target="_blank">↗</a>
       </div>
-      <div class="mbar"><div class="mbar-f" style="width:1%;background:var(--red)"></div></div>
+      <div class="mbar"><div class="mbar-f" style="width:3%;background:var(--red)"></div></div>
     </div><div class="mc">
       <div class="mc-name">Or</div>
       <div class="mc-label">Or XAU/USD</div>
-      <div class="mc-price">$4,164</div>
+      <div class="mc-price">$4,173</div>
       <div class="mc-row">
-        <span class="mc-chg dn">▼ -4.47%</span>
+        <span class="mc-chg dn">▼ -4.27%</span>
         <a class="src-link" href="https://finance.yahoo.com/quote/GC=F" target="_blank">↗</a>
       </div>
-      <div class="mbar"><div class="mbar-f" style="width:36%;background:var(--red)"></div></div>
+      <div class="mbar"><div class="mbar-f" style="width:34%;background:var(--red)"></div></div>
     </div><div class="mc">
       <div class="mc-name">Argent</div>
       <div class="mc-label">Argent XAG/USD</div>
-      <div class="mc-price">$64.55</div>
+      <div class="mc-price">$64.91</div>
       <div class="mc-row">
-        <span class="mc-chg dn">▼ -8.69%</span>
+        <span class="mc-chg dn">▼ -8.18%</span>
         <a class="src-link" href="https://finance.yahoo.com/quote/SI=F" target="_blank">↗</a>
       </div>
-      <div class="mbar"><div class="mbar-f" style="width:70%;background:var(--red)"></div></div>
+      <div class="mbar"><div class="mbar-f" style="width:65%;background:var(--red)"></div></div>
     </div><div class="mc">
       <div class="mc-name">US3M</div>
       <div class="mc-label">US 3M Yield</div>
@@ -465,6 +475,15 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);font-size:14
         <a class="src-link" href="https://finance.yahoo.com/quote/^VIX" target="_blank">↗</a>
       </div>
       <div class="mbar"><div class="mbar-f" style="width:72%;background:var(--red)"></div></div>
+    </div><div class="mc">
+      <div class="mc-name">Napoléon 20F</div>
+      <div class="mc-label">Napoléon 20F · bdor.fr</div>
+      <div class="mc-price">$665.00</div>
+      <div class="mc-row">
+        <span class="mc-chg dn">▼ -2.49%</span>
+        <a class="src-link" href="https://www.bdor.fr/produits-d-investissement-or/cours-prix-pieces-d-or/20-francs-napoleon-or" target="_blank">↗</a>
+      </div>
+      <div class="mbar"><div class="mbar-f" style="width:20%;background:var(--red)"></div></div>
     </div></div>
   </div>
 
@@ -499,7 +518,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);font-size:14
 <div class="footer">
   <div class="footer-name">Doog Intelligent Market · v1</div>
   <div class="footer-src">Sources : CoinGecko · Yahoo Finance · TheBlock · CoinTelegraph · Federal Reserve · BCE</div>
-  <div class="footer-disc">Rapport généré le Friday 19 june 2026 · 16:20 · Usage personnel · Pas un conseil en investissement</div>
+  <div class="footer-disc">Rapport généré le Friday 19 june 2026 · 19:07 · Usage personnel · Pas un conseil en investissement</div>
 </div>
 <div class="stb" id="stb" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</div>
 <script>

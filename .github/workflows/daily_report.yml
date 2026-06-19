@@ -29,6 +29,9 @@ jobs:
       - name: Initialise la base de données
         run: python3 database/init_db.py
 
+      - name: Collecte Napoléon 20F
+        run: python3 collectors/collect_napoleon.py
+
       - name: Génère le rapport
         run: python3 main.py --no-browser
 

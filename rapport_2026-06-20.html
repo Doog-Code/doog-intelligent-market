@@ -76,14 +76,16 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);font-size:18
 .stb{position:fixed;bottom:20px;right:20px;width:38px;height:38px;border-radius:50%;background:var(--bg3);border:1px solid var(--border2);color:var(--text2);font-size:16px;display:flex;align-items:center;justify-content:center;cursor:pointer;opacity:0;transition:opacity .2s;z-index:50}
 .stb.on{opacity:1}
 @media(max-width:600px){
-body{font-size:16px}
-.nc-title{font-size:16px}
-.nc-body{font-size:15px}
-.interp-text{font-size:15px}
-.summary-line{font-size:15px}
-.mc-price{font-size:15px}
-.nb{font-size:12px;padding:5px 14px}
+:root{--max:100%}
+body{font-size:20px;-webkit-text-size-adjust:100%}
+.nc-title{font-size:20px}
+.nc-body{font-size:19px}
+.interp-text{font-size:19px}
+.summary-line{font-size:19px}
+.mc-price{font-size:19px}
+.nb{font-size:14px;padding:6px 16px}
 .section{padding:14px}
+.mgrid{grid-template-columns:repeat(auto-fill,minmax(140px,1fr))}
 }
 </style>
 </head>
@@ -98,7 +100,7 @@ body{font-size:16px}
     <div style="text-align:right">
       <div class="live-pill"><span class="live-dot"></span>
       <span class="live-text">Données réelles</span></div>
-      <div class="header-date">Saturday 20 june 2026 · 08:07</div>
+      <div class="header-date">Saturday 20 june 2026 · 08:20</div>
     </div>
   </div>
   <div class="nav">
@@ -115,22 +117,22 @@ body{font-size:16px}
     <div class="slabel">01 · Résumé exécutif</div>
     <div class="interp-block" style="border-left-color:var(--neon)">
       <div class="interp-label">⚡ Analyse Doog · Groq / Llama 3.3</div>
-      <div class="interp-text">Les marchés crypto montrent une tendance haussière, avec le Bitcoin atteignant 63 000 $ et le Solana enregistrant une augmentation de 4,72 %. En revanche, les ETF liés au Bitcoin sont en baisse, ce qui pourrait indiquer une divergence entre les marchés crypto et les marchés traditionnels. Le DXY est en hausse, ce qui pourrait avoir un impact négatif sur les marchés à terme, tandis que le VIX est également en hausse, indiquant une augmentation de la volatilité. Les signaux les plus importants sont la hausse du Bitcoin, la baisse des ETF liés au Bitcoin et la hausse du DXY, qui pourraient être corrélés à la perspective d'une hausse des taux de la Fed en juillet. Les actualités récentes sur l'ESMA et la lutte de Binance contre MiCA pourraient également avoir un impact sur les marchés crypto à long terme.</div>
+      <div class="interp-text">Les marchés crypto montrent une tendance haussière, avec le Bitcoin atteignant 63 000 $ et le Solana enregistrant une augmentation de 4,57 %. En revanche, les ETF liés au Bitcoin sont en baisse, ce qui pourrait indiquer une divergence entre les investisseurs institutionnels et les investisseurs individuels. Le DXY en hausse et le VIX en augmentation suggèrent une attitude prudente des investisseurs face à l'incertitude économique. Les actualités récentes de l'ESMA et de la BCE pourraient avoir un impact sur la réglementation des cryptomonnaies, ce qui pourrait influencer les marchés. Les signaux les plus importants sont la hausse du Bitcoin, la baisse des ETF liés au Bitcoin et l'augmentation du DXY, qui pourraient être corrélés à la réglementation et à l'attitude des investisseurs face à l'incertitude économique.</div>
     </div>
     <div class="summary-block"><div class="summary-line">
       <span class="sum-tick">BTC</span>
       <span class="sum-text">
-        <span class="sum-val up">$63,548 (+1.60%)</span> 
+        <span class="sum-val up">$63,486 (+1.47%)</span> 
       </span>
     </div><div class="summary-line">
       <span class="sum-tick">ETH</span>
       <span class="sum-text">
-        <span class="sum-val up">$1,724 (+1.80%)</span> 
+        <span class="sum-val up">$1,723 (+1.72%)</span> 
       </span>
     </div><div class="summary-line">
       <span class="sum-tick">SOL</span>
       <span class="sum-text">
-        <span class="sum-val up">$71.48 (+4.72%)</span> 
+        <span class="sum-val up">$71.47 (+4.57%)</span> 
       </span>
     </div><div class="summary-line">
       <span class="sum-tick">DXY</span>
@@ -173,7 +175,7 @@ body{font-size:16px}
       <div class="nc-title">L'ESMA publie la liste restreinte des candidats pour le poste de président</div>
       <div class="nc-body">L'ESMA publie la liste restreinte des candidats pour le poste de président</div>
       <div class="nc-foot">
-        <span class="nc-time">2026-06-20 08:06</span>
+        <span class="nc-time">2026-06-20 08:19</span>
         <span class="nc-age">Il y a 0h</span>
       </div>
     </div><div class="news-card">
@@ -187,7 +189,7 @@ body{font-size:16px}
       <div class="nc-title">L'ESMA consulte sur des lignes directrices révisées pour soutenir des allocations et des confirmations plus fluides sous T+1</div>
       <div class="nc-body">L'ESMA consulte sur des lignes directrices révisées pour soutenir des allocations et des confirmations plus fluides sous T+1</div>
       <div class="nc-foot">
-        <span class="nc-time">2026-06-20 08:06</span>
+        <span class="nc-time">2026-06-20 08:19</span>
         <span class="nc-age">Il y a 0h</span>
       </div>
     </div><div class="news-card">
@@ -198,10 +200,10 @@ body{font-size:16px}
           <a class="src-link" href="https://www.esma.europa.eu/press-news/esma-news/new-qas-available-may-2026" target="_blank">→ Source originale</a>
         </div>
       </div>
-      <div class="nc-title">Nouvelles Q&amp;R disponibles</div>
-      <div class="nc-body">Nouvelles Q&amp;R disponibles</div>
+      <div class="nc-title">Nouvelles Q&amp;A disponibles</div>
+      <div class="nc-body">Nouvelles Q&amp;A disponibles</div>
       <div class="nc-foot">
-        <span class="nc-time">2026-06-20 08:06</span>
+        <span class="nc-time">2026-06-20 08:19</span>
         <span class="nc-age">Il y a 0h</span>
       </div>
     </div><div class="news-card">
@@ -215,7 +217,7 @@ body{font-size:16px}
       <div class="nc-title">Le rapport annuel de données de l'ESMA montre une qualité accrue, une utilisation plus large et des progrès numériques</div>
       <div class="nc-body">Le rapport annuel de données de l'ESMA montre une qualité accrue, une utilisation plus large et des progrès numériques</div>
       <div class="nc-foot">
-        <span class="nc-time">2026-06-20 08:06</span>
+        <span class="nc-time">2026-06-20 08:19</span>
         <span class="nc-age">Il y a 0h</span>
       </div>
     </div><div class="news-card">
@@ -226,10 +228,10 @@ body{font-size:16px}
           <a class="src-link" href="https://www.esma.europa.eu/press-news/esma-news/esma-publishes-latest-edition-its-newsletter-43" target="_blank">→ Source originale</a>
         </div>
       </div>
-      <div class="nc-title">L'ESMA publie la dernière édition de son bulletin d'information</div>
-      <div class="nc-body">L'ESMA publie la dernière édition de son bulletin d'information</div>
+      <div class="nc-title">L'ESMA publie la dernière édition de sa lettre d'information</div>
+      <div class="nc-body">L'ESMA publie la dernière édition de sa lettre d'information</div>
       <div class="nc-foot">
-        <span class="nc-time">2026-06-20 08:06</span>
+        <span class="nc-time">2026-06-20 08:19</span>
         <span class="nc-age">Il y a 0h</span>
       </div>
     </div>
@@ -245,40 +247,40 @@ body{font-size:16px}
     <div class="mcat">Crypto</div>
     <div class="interp-block" style="border-left-color:var(--green)">
       <div class="interp-label">⚡ Analyse Doog · Groq / Llama 3.3</div>
-      <div class="interp-text">Le prix du BTC évolue à la hausse (+1,60%) malgré la baisse des ETF liés au BTC (IBIT : -4,17%, FBTC : -4,13%) et l'augmentation du DXY (+0,76%), qui pourrait normalement exercer une pression à la baisse sur les actifs à risque comme les cryptomonnaies. Cependant, la hausse du VIX (+2,32%) et les incertitudes entourant la politique monétaire de la Fed, avec des chances de hausse des taux en juillet à 40 %, pourraient contribuer à l'attrait du BTC comme actif refuge. Les facteurs concordants incluent la résilience du marché des cryptomonnaies face aux vents contraires macro-économiques, tandis que les risques identifiés incluent la volatilité potentielle liée aux décisions de politique monétaire et aux réactions des marchés financiers.</div>
+      <div class="interp-text">Le prix du BTC évolue à la hausse (+1,47%) malgré la baisse des ETF liés au BTC (IBIT et FBTC) et la hausse du DXY (+0,76%), ce qui suggère une résilience du marché des cryptomonnaies. Les facteurs concordants incluent la faible volatilité du marché (VIX à 16,78%) et les nouvelles récentes sur la régulation des marchés financiers, notamment la lutte de Binance contre MiCA. Cependant, les risques identifiés incluent une possible hausse des taux d'intérêt de la Fed en juillet, ce qui pourrait avoir un impact négatif sur le marché des cryptomonnaies.</div>
     </div>
     <div class="mgrid"><div class="mc">
       <div class="mc-name">BTC</div>
       <div class="mc-label">BTC</div>
-      <div class="mc-price">$63,548</div>
+      <div class="mc-price">$63,486</div>
       <div class="mc-row">
-        <span class="mc-chg up">▲ +1.60%</span>
+        <span class="mc-chg up">▲ +1.47%</span>
         <a class="src-link" href="https://www.coingecko.com/en/coins/bitcoin" target="_blank">↗</a>
       </div>
-      <div class="mbar"><div class="mbar-f" style="width:13%;background:var(--green)"></div></div>
+      <div class="mbar"><div class="mbar-f" style="width:12%;background:var(--green)"></div></div>
     </div><div class="mc">
       <div class="mc-name">ETH</div>
       <div class="mc-label">ETH</div>
-      <div class="mc-price">$1,724</div>
+      <div class="mc-price">$1,723</div>
       <div class="mc-row">
-        <span class="mc-chg up">▲ +1.80%</span>
+        <span class="mc-chg up">▲ +1.72%</span>
         <a class="src-link" href="https://www.coingecko.com/en/coins/ethereum" target="_blank">↗</a>
       </div>
       <div class="mbar"><div class="mbar-f" style="width:14%;background:var(--green)"></div></div>
     </div><div class="mc">
       <div class="mc-name">SOL</div>
       <div class="mc-label">SOL</div>
-      <div class="mc-price">$71.48</div>
+      <div class="mc-price">$71.47</div>
       <div class="mc-row">
-        <span class="mc-chg up">▲ +4.72%</span>
+        <span class="mc-chg up">▲ +4.57%</span>
         <a class="src-link" href="https://www.coingecko.com/en/coins/solana" target="_blank">↗</a>
       </div>
-      <div class="mbar"><div class="mbar-f" style="width:38%;background:var(--green)"></div></div>
+      <div class="mbar"><div class="mbar-f" style="width:37%;background:var(--green)"></div></div>
     </div></div>
     <div class="mcat">ETF Bitcoin Spot</div>
     <div class="interp-block" style="border-left-color:var(--purple)">
       <div class="interp-label">⚡ Analyse Doog · Groq / Llama 3.3</div>
-      <div class="interp-text">Les ETF BTC (IBIT, FBTC, BITB, ARKB, HODL) affichent des baisses comprises entre 4,09% et 4,21%, contrastant avec la hausse du prix du BTC de 1,60%, indiquant un décalage entre les investissements institutionnels et le marché spot. Cela pourrait refléter une prise de bénéfice ou une attitude prudente des investisseurs institutionnels face à l'incertitude macroéconomique et aux récentes actualités réglementaires.</div>
+      <div class="interp-text">Les ETF BTC (IBIT, FBTC, BITB, ARKB, HODL) affichent tous des baisses, ce qui contraste avec la hausse du prix du BTC, indiquant un décalage entre les marchés des ETF et du crypto. Cela pourrait être dû à des facteurs macro-économiques, tels que la hausse du DXY et la baisse de l'EURUSD, qui influencent les investissements dans les ETF.</div>
     </div>
     <div class="mgrid"><div class="mc">
       <div class="mc-name">ARKB</div>
@@ -329,7 +331,7 @@ body{font-size:16px}
     <div class="mcat">Macro mondiale</div>
     <div class="interp-block" style="border-left-color:var(--amber)">
       <div class="interp-label">⚡ Analyse Doog · Groq / Llama 3.3</div>
-      <div class="interp-text">Le contexte macro global ce matin montre une légère augmentation de l'appétit au risque, avec une hausse des marchés actions (Nasdaq +0,54%) et une baisse de l'or (-4,27%) et du pétrole (-0,33%). Cependant, la montée du DXY (+0,76%) et du VIX (+2,32%) suggère une certaine prudence, tandis que le taux US10Y stable (4,45%) indique une attente de stabilité des marchés. Globalement, ces indicateurs combinés signalent un appétit au risque modéré, avec une vigilance accrue en raison de l'incertitude économique.</div>
+      <div class="interp-text">Le contexte macro global ce matin suggère une légère augmentation de l'aversion au risque, avec une hausse du DXY (+0,76%) et du VIX (+2,32%), ainsi qu'une baisse de l'or (-4,27%) et du pétrole (-0,33%). Les rendements des obligations américaines à 10 ans (US10Y) restent stables, à 4,45%. Cela indique que les investisseurs sont prudents, mais les marchés actions (SP500, Nasdaq) montrent une certaine résilience, ce qui suggère un appétit au risque mitigé.</div>
     </div>
     <div class="mgrid"><div class="mc">
       <div class="mc-name">CAC40</div>
@@ -518,7 +520,7 @@ body{font-size:16px}
 <div class="footer">
   <div class="footer-name">Doog Intelligent Market · v1</div>
   <div class="footer-src">Sources : CoinGecko · Yahoo Finance · TheBlock · CoinTelegraph · Federal Reserve · BCE</div>
-  <div class="footer-disc">Rapport généré le Saturday 20 june 2026 · 08:07 · Usage personnel · Pas un conseil en investissement</div>
+  <div class="footer-disc">Rapport généré le Saturday 20 june 2026 · 08:20 · Usage personnel · Pas un conseil en investissement</div>
 </div>
 <div class="stb" id="stb" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</div>
 <script>

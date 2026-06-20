@@ -1,3 +1,4 @@
+
 import os
 import sys
 import sqlite3
@@ -9,21 +10,35 @@ load_dotenv()
 
 DB_PATH = "database/market_terminal.db"
 
+# ── CANDIDATS PAR CLASSE ──
+CANDIDATES = {
+    "crypto": [
+        {"ticker": "BTC", "nom": "Bitcoin",  "vehicule": "Spot / ETF IBIT"},
+        {"ticker": "ETH", "nom": "Ethereum", "vehicule": "Spot"},
+        {"ticker": "SOL", "nom": "Solana",   "vehicule": "Spot"},
+    ],
+    "indice": [
+        {"ticker": "^IXIC",    "nom": "Nasdaq 100",  "vehicule": "ETF / CFD"},
+        {"ticker": "^GSPC",    "nom": "S&P 500",     "vehicule": "ETF / CFD"},
+        {"ticker": "^FCHI",    "nom": "CAC 40",      "vehicule": "ETF / CFD"},
+        {"ticker": "^STOXX50E","nom": "EuroStoxx 50","vehicule": "ETF / CFD"},
+    ],
+    "matiere": [
+        {"ticker": "GC=F", "nom": "Or XAU/USD",     "vehicule": "ETF / CFD"},
+        {"ticker": "SI=F", "nom": "Argent XAG/USD",  "vehicule": "ETF / CFD"},
+    ],
+}
+
 def get_latest(ticker):
-    """Récupère le dernier prix et variation d'un actif."""
     conn = sqlite3.connect(DB_PATH)
-    # Recherche exacte d'abord
     row = conn.execute("""
         SELECT price, change_24h FROM market_data
-        WHERE asset = ?
-        ORDER BY timestamp DESC LIMIT 1
+        WHERE asset = ? ORDER BY timestamp DESC LIMIT 1
     """, (ticker,)).fetchone()
-    # Si pas trouvé, recherche avec pipe (format "ticker|nom")
     if not row:
         row = conn.execute("""
             SELECT price, change_24h FROM market_data
-            WHERE asset LIKE ?
-            ORDER BY timestamp DESC LIMIT 1
+            WHERE asset LIKE ? ORDER BY timestamp DESC LIMIT 1
         """, (f"{ticker}|%",)).fetchone()
     conn.close()
     if row:
@@ -31,7 +46,6 @@ def get_latest(ticker):
     return None
 
 def get_recent_news_text():
-    """Récupère les titres des news récentes pour contexte."""
     conn = sqlite3.connect(DB_PATH)
     rows = conn.execute("""
         SELECT title, importance FROM articles
@@ -41,24 +55,26 @@ def get_recent_news_text():
     conn.close()
     return [(r[0], r[1]) for r in rows]
 
-def score_factors(asset):
-    """
-    Évalue les facteurs de marché pour un actif donné.
-    Retourne liste de facteurs positifs, négatifs et le score net.
-    """
+def score_factors(ticker, classe):
     factors_pos = []
     factors_neg = []
 
-    # ── FACTEUR 1 : DXY ──
-    dxy = get_latest("DX-Y.NYB")
+    dxy   = get_latest("DX-Y.NYB")
+    vix   = get_latest("^VIX")
+    us10y = get_latest("^TNX")
+    gold  = get_latest("GC=F")
+    ndx   = get_latest("^IXIC")
+    ibit  = get_latest("IBIT")
+    asset = get_latest(ticker)
+
+    # ── DXY ──
     if dxy:
         if dxy["change"] < -0.3:
-            factors_pos.append(("DXY ↓", "Dollar en repli — favorable aux actifs risqués"))
+            factors_pos.append(("DXY ↓", f"Dollar en repli ({dxy['change']:+.2f}%) — favorable aux actifs risqués"))
         elif dxy["change"] > 0.3:
-            factors_neg.append(("DXY ↑", "Dollar en hausse — pression sur les actifs"))
+            factors_neg.append(("DXY ↑", f"Dollar en hausse ({dxy['change']:+.2f}%) — pression sur les actifs"))
 
-    # ── FACTEUR 2 : VIX ──
-    vix = get_latest("^VIX")
+    # ── VIX ──
     if vix:
         if vix["change"] < -5:
             factors_pos.append(("VIX ↓", f"Peur en forte baisse ({vix['change']:+.1f}%) — appétit au risque"))
@@ -67,68 +83,79 @@ def score_factors(asset):
         elif vix["change"] > 10:
             factors_neg.append(("VIX ↑", f"Peur en forte hausse ({vix['change']:+.1f}%) — risque élevé"))
 
-    # ── FACTEUR 3 : ETF BTC (IBIT comme proxy institutionnel) ──
-    ibit = get_latest("IBIT")
-    if ibit:
-        if ibit["change"] > 2:
-            factors_pos.append(("ETF ↑", f"IBIT +{ibit['change']:.1f}% — demande institutionnelle"))
-        elif ibit["change"] < -2:
-            factors_neg.append(("ETF ↓", f"IBIT {ibit['change']:+.1f}% — sortie institutionnelle"))
+    # ── US10Y ──
+    if us10y:
+        if us10y["change"] < -1:
+            factors_pos.append(("US10Y ↓", f"Taux longs en baisse ({us10y['change']:+.2f}%) — favorable aux actifs"))
+        elif us10y["change"] > 1:
+            factors_neg.append(("US10Y ↑", f"Taux longs en hausse ({us10y['change']:+.2f}%) — pression valorisations"))
 
-    # ── FACTEUR 4 : Nasdaq (corrélation crypto/tech) ──
-    ndx = get_latest("^IXIC")
-    if ndx:
-        if ndx["change"] > 0.5:
-            factors_pos.append(("Nasdaq ↑", f"+{ndx['change']:.1f}% — contexte actions favorable"))
-        elif ndx["change"] < -1:
-            factors_neg.append(("Nasdaq ↓", f"{ndx['change']:+.1f}% — risk-off actions"))
-
-    # ── FACTEUR 5 : Or (signal refuge vs risque) ──
-    gold = get_latest("GC=F")
-    if gold:
-        if asset in ["BTC","ETH","SOL"]:
-            # Or en forte hausse = fuite vers refuge = négatif pour crypto
+    # ── LOGIQUE PAR CLASSE ──
+    if classe == "crypto":
+        if ibit:
+            if ibit["change"] > 2:
+                factors_pos.append(("ETF ↑", f"IBIT +{ibit['change']:.1f}% — demande institutionnelle BTC"))
+            elif ibit["change"] < -2:
+                factors_neg.append(("ETF ↓", f"IBIT {ibit['change']:+.1f}% — sortie institutionnelle"))
+        if ndx:
+            if ndx["change"] > 0.5:
+                factors_pos.append(("Nasdaq ↑", f"+{ndx['change']:.1f}% — corrélation tech favorable"))
+            elif ndx["change"] < -1:
+                factors_neg.append(("Nasdaq ↓", f"{ndx['change']:+.1f}% — risk-off tech"))
+        if gold:
             if gold["change"] > 2:
                 factors_neg.append(("Or ↑↑", f"+{gold['change']:.1f}% — fuite vers valeurs refuge"))
             elif gold["change"] > 0.5:
                 factors_pos.append(("Or ↑", f"+{gold['change']:.1f}% — inflation hedge actif"))
 
-    # ── FACTEUR 6 : US10Y ──
-    us10y = get_latest("^TNX")
-    if us10y:
-        if us10y["change"] < -1:
-            factors_pos.append(("US10Y ↓", "Taux longs en baisse — favorable aux actifs risqués"))
-        elif us10y["change"] > 1:
-            factors_neg.append(("US10Y ↑", "Taux longs en hausse — pression sur valorisations"))
+    elif classe == "indice":
+        if ndx and ticker != "^IXIC":
+            if ndx["change"] > 0.5:
+                factors_pos.append(("Nasdaq ↑", f"+{ndx['change']:.1f}% — leadership tech haussier"))
+            elif ndx["change"] < -1:
+                factors_neg.append(("Nasdaq ↓", f"{ndx['change']:+.1f}% — tech en repli"))
+        if gold and gold["change"] > 1.5:
+            factors_neg.append(("Or ↑", f"+{gold['change']:.1f}% — rotation défensive"))
 
-    # ── FACTEUR 7 : Performance de l'actif lui-même ──
-    asset_data = get_latest(asset)
-    if asset_data:
-        if asset_data["change"] > 2:
-            factors_pos.append((f"{asset} ↑", f"Momentum haussier +{asset_data['change']:.1f}%"))
-        elif asset_data["change"] < -3:
-            factors_neg.append((f"{asset} ↓", f"Momentum baissier {asset_data['change']:+.1f}%"))
+    elif classe == "matiere":
+        if ticker in ("GC=F", "SI=F"):
+            # Or/Argent : DXY baisse = favorable, taux baisse = favorable
+            if dxy and dxy["change"] < -0.3:
+                # déjà capturé dessus, on renforce
+                pass
+            if vix and vix["change"] > 5:
+                factors_pos.append(("VIX ↑", f"Peur en hausse ({vix['change']:+.1f}%) — demande refuge Or/Argent"))
+            if gold and ticker == "SI=F":
+                if gold["change"] > 1:
+                    factors_pos.append(("Or ↑", f"+{gold['change']:.1f}% — argent suit l'or"))
+
+    # ── MOMENTUM PROPRE DE L'ACTIF ──
+    if asset:
+        if asset["change"] > 2:
+            factors_pos.append((f"{ticker} ↑", f"Momentum haussier +{asset['change']:.1f}%"))
+        elif asset["change"] < -3:
+            factors_neg.append((f"{ticker} ↓", f"Momentum baissier {asset['change']:+.1f}%"))
 
     score_net = len(factors_pos) - len(factors_neg)
     return factors_pos, factors_neg, score_net
 
-def generate_opportunity(asset, factors_pos, factors_neg, asset_data):
-    """Demande à Groq de structurer une opportunité complète."""
+def generate_opportunity(ticker, nom, vehicule, classe, factors_pos, factors_neg, asset_data):
     from groq import Groq
+    import json
     client = Groq(api_key=os.getenv("GROQ_API_KEY"))
 
     factors_text = "\n".join([f"  ✅ {f[0]}: {f[1]}" for f in factors_pos])
     risks_text   = "\n".join([f"  ⚠️ {f[0]}: {f[1]}" for f in factors_neg])
-
     news = get_recent_news_text()
     news_text = "\n".join([f"  {'🔴' if n[1]=='CRITIQUE' else '🟡'} {n[0]}" for n in news[:8]])
 
     prompt = f"""Tu es un analyste financier senior. Génère une opportunité de trading structurée.
 
-ACTIF : {asset}
-PRIX ACTUEL : ${asset_data['price']:,.2f} ({asset_data['change']:+.2f}%)
+ACTIF : {nom} ({ticker}) — Classe : {classe}
+PRIX ACTUEL : {asset_data['price']:,.2f} ({asset_data['change']:+.2f}%)
+VÉHICULE SUGGÉRÉ : {vehicule}
 
-FACTEURS FAVORABLES DÉTECTÉS :
+FACTEURS FAVORABLES :
 {factors_text}
 
 FACTEURS DÉFAVORABLES :
@@ -157,94 +184,91 @@ Réponds UNIQUEMENT avec le JSON, sans texte autour."""
 
     response = client.chat.completions.create(
         model="llama-3.3-70b-versatile",
-        messages=[{"role":"user","content":prompt}],
+        messages=[{"role": "user", "content": prompt}],
         max_tokens=500,
         temperature=0.2
     )
-
-    import json
     raw = response.choices[0].message.content.strip()
     raw = raw.replace("```json","").replace("```","").strip()
     return json.loads(raw)
 
 def run(max_opportunities=3):
-    """Point d'entrée principal du moteur d'opportunités."""
     print(f"[{datetime.now().strftime('%H:%M:%S')}] Moteur opportunités — analyse en cours...")
-
-    CANDIDATES = ["BTC","ETH","SOL"]
     opportunities = []
 
-    for asset in CANDIDATES:
+    for classe, candidats in CANDIDATES.items():
         if len(opportunities) >= max_opportunities:
             break
+        for c in candidats:
+            if len(opportunities) >= max_opportunities:
+                break
 
-        print(f"  → Analyse {asset}...")
-        asset_data = get_latest(asset)
-        if not asset_data:
-            print(f"  ⚠ Pas de données pour {asset}")
-            continue
+            ticker  = c["ticker"]
+            nom     = c["nom"]
+            vehicule = c["vehicule"]
 
-        factors_pos, factors_neg, score = score_factors(asset)
-        total_factors = len(factors_pos) + len(factors_neg)
-
-        print(f"    Score net : {score:+d} ({len(factors_pos)} pos / {len(factors_neg)} neg)")
-
-        # Seuil minimum : 3 facteurs positifs ET score net positif
-        if len(factors_pos) < 3 or score <= 0:
-            print(f"    ✗ Signal insuffisant — pas d'opportunité générée")
-            continue
-
-        # Niveau de concordance
-        if len(factors_pos) >= 5:
-            concordance = "MAJEURE"
-        elif len(factors_pos) >= 4:
-            concordance = "FORTE"
-        else:
-            concordance = "MODÉRÉE"
-
-        print(f"    ✓ Signal {concordance} — génération opportunité via Groq...")
-
-        try:
-            opp = generate_opportunity(asset, factors_pos, factors_neg, asset_data)
-
-            if opp.get("skip"):
-                print(f"    ✗ Groq juge le signal insuffisant — skip")
+            print(f"  → Analyse {nom} ({ticker})...")
+            asset_data = get_latest(ticker)
+            if not asset_data:
+                print(f"  ⚠ Pas de données pour {ticker}")
                 continue
 
-            # Calcule R/R
-            entry  = opp.get("entrée", asset_data["price"])
-            stop   = opp.get("stop",   entry * 0.96)
-            target = opp.get("objectif", entry * 1.08)
-            risk   = abs(entry - stop)
-            reward = abs(target - entry)
-            rr     = round(reward / risk, 1) if risk > 0 else 0
+            factors_pos, factors_neg, score = score_factors(ticker, classe)
+            print(f"    Score net : {score:+d} ({len(factors_pos)} pos / {len(factors_neg)} neg)")
 
-            opportunities.append({
-                "asset":        asset,
-                "price":        asset_data["price"],
-                "change":       asset_data["change"],
-                "concordance":  concordance,
-                "factors_pos":  factors_pos,
-                "factors_neg":  factors_neg,
-                "score":        len(factors_pos),
-                "these":        opp.get("thèse",""),
-                "entree":       entry,
-                "stop":         stop,
-                "objectif":     target,
-                "rr":           rr,
-                "horizon":      opp.get("horizon","7-14 jours"),
-                "invalidation": opp.get("invalidation",""),
-                "vehicule":     opp.get("véhicule","Spot"),
-                "created_at":   datetime.now().isoformat()
-            })
+            if len(factors_pos) < 3 or score <= 0:
+                print(f"    ✗ Signal insuffisant")
+                continue
 
-            print(f"    ✓ Opportunité {asset} générée — R/R 1:{rr}")
+            if len(factors_pos) >= 5:
+                concordance = "MAJEURE"
+            elif len(factors_pos) >= 4:
+                concordance = "FORTE"
+            else:
+                concordance = "MODÉRÉE"
 
-        except Exception as e:
-            print(f"    ✗ Erreur génération : {e}")
+            print(f"    ✓ Signal {concordance} — génération via Groq...")
+
+            try:
+                opp = generate_opportunity(ticker, nom, vehicule, classe, factors_pos, factors_neg, asset_data)
+                if opp.get("skip"):
+                    print(f"    ✗ Groq juge le signal insuffisant")
+                    continue
+
+                entry  = opp.get("entrée",   asset_data["price"])
+                stop   = opp.get("stop",     entry * 0.96)
+                target = opp.get("objectif", entry * 1.08)
+                risk   = abs(entry - stop)
+                reward = abs(target - entry)
+                rr     = round(reward / risk, 1) if risk > 0 else 0
+
+                opportunities.append({
+                    "asset":       nom,
+                    "ticker":      ticker,
+                    "classe":      classe,
+                    "price":       asset_data["price"],
+                    "change":      asset_data["change"],
+                    "concordance": concordance,
+                    "factors_pos": factors_pos,
+                    "factors_neg": factors_neg,
+                    "score":       len(factors_pos),
+                    "these":       opp.get("thèse",""),
+                    "entree":      entry,
+                    "stop":        stop,
+                    "objectif":    target,
+                    "rr":          rr,
+                    "horizon":     opp.get("horizon","7-14 jours"),
+                    "invalidation":opp.get("invalidation",""),
+                    "vehicule":    opp.get("véhicule", vehicule),
+                    "created_at":  datetime.now().isoformat()
+                })
+                print(f"    ✓ Opportunité {nom} générée — R/R 1:{rr}")
+
+            except Exception as e:
+                print(f"    ✗ Erreur : {e}")
 
     if not opportunities:
-        print(f"  → Aucune opportunité détectée aujourd'hui — marchés sans signal clair")
+        print(f"  → Aucune opportunité détectée — marchés sans signal clair")
     else:
         print(f"  ✓ {len(opportunities)} opportunité(s) générée(s)")
 
@@ -252,15 +276,9 @@ def run(max_opportunities=3):
 
 if __name__ == "__main__":
     opps = run()
-    if opps:
-        for o in opps:
-            print(f"\n{'='*50}")
-            print(f"ACTIF    : {o['asset']} @ ${o['price']:,.2f}")
-            print(f"SIGNAL   : {o['concordance']} ({o['score']} facteurs)")
-            print(f"THÈSE    : {o['these']}")
-            print(f"ENTRÉE   : ${o['entree']:,.2f}")
-            print(f"STOP     : ${o['stop']:,.2f}")
-            print(f"OBJECTIF : ${o['objectif']:,.2f}")
-            print(f"R/R      : 1:{o['rr']}")
-            print(f"HORIZON  : {o['horizon']}")
-            print(f"INVALID. : {o['invalidation']}")
+    for o in opps:
+        print(f"\n{'='*50}")
+        print(f"ACTIF    : {o['asset']} @ {o['price']:,.2f}")
+        print(f"SIGNAL   : {o['concordance']} ({o['score']} facteurs)")
+        print(f"THÈSE    : {o['these']}")
+        print(f"R/R      : 1:{o['rr']}")

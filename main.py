@@ -591,14 +591,16 @@ body{{background:var(--bg);color:var(--text);font-family:var(--font);font-size:1
 .stb{{position:fixed;bottom:20px;right:20px;width:38px;height:38px;border-radius:50%;background:var(--bg3);border:1px solid var(--border2);color:var(--text2);font-size:16px;display:flex;align-items:center;justify-content:center;cursor:pointer;opacity:0;transition:opacity .2s;z-index:50}}
 .stb.on{{opacity:1}}
 @media(max-width:600px){{
-body{{font-size:16px}}
-.nc-title{{font-size:16px}}
-.nc-body{{font-size:15px}}
-.interp-text{{font-size:15px}}
-.summary-line{{font-size:15px}}
-.mc-price{{font-size:15px}}
-.nb{{font-size:12px;padding:5px 14px}}
+:root{{--max:100%}}
+body{{font-size:20px;-webkit-text-size-adjust:100%}}
+.nc-title{{font-size:20px}}
+.nc-body{{font-size:19px}}
+.interp-text{{font-size:19px}}
+.summary-line{{font-size:19px}}
+.mc-price{{font-size:19px}}
+.nb{{font-size:14px;padding:6px 16px}}
 .section{{padding:14px}}
+.mgrid{{grid-template-columns:repeat(auto-fill,minmax(140px,1fr))}}
 }}
 </style>
 </head>

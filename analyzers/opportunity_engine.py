@@ -29,6 +29,20 @@ CANDIDATES = {
     ],
 }
 
+STOCKS = {
+    "AAPL":"Apple","NVDA":"NVIDIA","MSFT":"Microsoft","META":"Meta",
+    "GOOGL":"Alphabet","AMZN":"Amazon","TSLA":"Tesla","AMD":"AMD",
+    "IONQ":"IonQ","RGTI":"Rigetti","QUBT":"Quantum Computing","ARQQ":"Arqit Quantum",
+    "PLTR":"Palantir","ARM":"ARM Holdings","SMCI":"Super Micro",
+    "TTE.PA":"TotalEnergies","AIR.PA":"Airbus","HO.PA":"Thales",
+    "LDO.MI":"Leonardo","RTX":"RTX","LMT":"Lockheed Martin",
+    "MC.PA":"LVMH","RMS.PA":"Hermès","KER.PA":"Kering",
+    "OR.PA":"L'Oréal","ASML.AS":"ASML","CFR.SW":"Richemont",
+    "SAP.DE":"SAP","SIE.DE":"Siemens","VOW3.DE":"Volkswagen",
+    "NESN.SW":"Nestlé","NOVO-B.CO":"Novo Nordisk",
+    "7203.T":"Toyota","005930.KS":"Samsung","TSM":"TSMC",
+}
+
 def get_latest(ticker):
     conn = sqlite3.connect(DB_PATH)
     row = conn.execute("""
@@ -192,6 +206,124 @@ Réponds UNIQUEMENT avec le JSON, sans texte autour."""
     raw = raw.replace("```json","").replace("```","").strip()
     return json.loads(raw)
 
+def check_news_for_stock(ticker, nom):
+    """Vérifie si des actualités récentes mentionnent cette action."""
+    conn = sqlite3.connect(DB_PATH)
+    rows = conn.execute("""
+        SELECT title, importance FROM articles
+        WHERE importance IN ('CRITIQUE','IMPORTANT')
+        ORDER BY collected_at DESC LIMIT 30
+    """).fetchall()
+    conn.close()
+    ticker_clean = ticker.split(".")[0].lower()
+    nom_clean    = nom.lower().split()[0]
+    matches = []
+    for title, importance in rows:
+        t = title.lower()
+        if ticker_clean in t or nom_clean in t:
+            matches.append((title, importance))
+    return matches
+
+def score_stock(ticker, nom, asset_data):
+    """Score facteurs pour une action individuelle."""
+    factors_pos = []
+    factors_neg = []
+    direction   = "LONG" if asset_data["change"] > 0 else "SHORT"
+
+    dxy   = get_latest("DX-Y.NYB")
+    vix   = get_latest("^VIX")
+    us10y = get_latest("^TNX")
+    ndx   = get_latest("^IXIC")
+
+    # Mouvement propre de l'action — facteur principal
+    chg = asset_data["change"]
+    if chg >= 5:
+        factors_pos.append((f"{ticker} ↑↑", f"Hausse forte +{chg:.1f}% — momentum majeur"))
+    elif chg >= 3:
+        factors_pos.append((f"{ticker} ↑", f"Hausse significative +{chg:.1f}%"))
+    elif chg <= -6:
+        factors_neg.append((f"{ticker} ↓↓", f"Baisse forte {chg:.1f}% — signal short"))
+    elif chg <= -4:
+        factors_neg.append((f"{ticker} ↓", f"Baisse significative {chg:.1f}%"))
+
+    # Actualités spécifiques — facteur clé stockpicking
+    news_matches = check_news_for_stock(ticker, nom)
+    if news_matches:
+        importance_top = "CRITIQUE" if any(n[1]=="CRITIQUE" for n in news_matches) else "IMPORTANT"
+        icon = "🔴" if importance_top == "CRITIQUE" else "🟡"
+        factors_pos.append(("News ↑", f"{icon} {len(news_matches)} actualité(s) récente(s) sur {nom}"))
+
+    # Contexte macro
+    if vix:
+        if vix["change"] < -3:
+            factors_pos.append(("VIX ↓", f"Sentiment positif ({vix['change']:+.1f}%)"))
+        elif vix["change"] > 8:
+            factors_neg.append(("VIX ↑", f"Stress marché ({vix['change']:+.1f}%)"))
+
+    if dxy:
+        if dxy["change"] < -0.3:
+            factors_pos.append(("DXY ↓", f"Dollar faible — favorable actions"))
+        elif dxy["change"] > 0.3:
+            factors_neg.append(("DXY ↑", f"Dollar fort — pression actions"))
+
+    if ndx:
+        if ndx["change"] > 0.5:
+            factors_pos.append(("Nasdaq ↑", f"+{ndx['change']:.1f}% — marché actions haussier"))
+        elif ndx["change"] < -1:
+            factors_neg.append(("Nasdaq ↓", f"{ndx['change']:+.1f}% — marché actions baissier"))
+
+    if us10y:
+        if us10y["change"] < -1:
+            factors_pos.append(("US10Y ↓", "Taux en baisse — favorable valorisations"))
+        elif us10y["change"] > 1:
+            factors_neg.append(("US10Y ↑", "Taux en hausse — pression valorisations"))
+
+    score_net = len(factors_pos) - len(factors_neg)
+    return factors_pos, factors_neg, score_net, direction
+
+def scan_stocks():
+    """Scanne les 35 actions et retourne la meilleure opportunité si signal suffisant."""
+    print(f"  → Scan stockpicking ({len(STOCKS)} actions)...")
+    best = None
+    best_score = 0
+
+    for ticker, nom in STOCKS.items():
+        asset_data = get_latest(f"{ticker}|{nom}")
+        if not asset_data:
+            asset_data = get_latest(ticker)
+        if not asset_data:
+            continue
+
+        chg = asset_data["change"]
+        # Filtre d'entrée : mouvement significatif requis
+        if abs(chg) < 3 and chg > -4:
+            continue
+
+        factors_pos, factors_neg, score, direction = score_stock(ticker, nom, asset_data)
+
+        if len(factors_pos) < 2 or score <= 0:
+            continue
+
+        # Garde le meilleur signal
+        total = len(factors_pos)
+        if total > best_score:
+            best_score = total
+            best = {
+                "ticker": ticker, "nom": nom,
+                "asset_data": asset_data,
+                "factors_pos": factors_pos,
+                "factors_neg": factors_neg,
+                "score": total,
+                "direction": direction
+            }
+
+    if best:
+        print(f"    ✓ Meilleur signal : {best['nom']} ({best['ticker']}) — {best['score']} facteurs")
+    else:
+        print(f"    → Aucun signal stockpicking suffisant")
+
+    return best
+
 def run(max_opportunities=3):
     print(f"[{datetime.now().strftime('%H:%M:%S')}] Moteur opportunités — analyse en cours...")
     opportunities = []
@@ -266,6 +398,48 @@ def run(max_opportunities=3):
 
             except Exception as e:
                 print(f"    ✗ Erreur : {e}")
+
+    # ── STOCKPICKING ──
+    if len(opportunities) < max_opportunities:
+        best_stock = scan_stocks()
+        if best_stock:
+            try:
+                opp = generate_opportunity(
+                    best_stock["ticker"], best_stock["nom"],
+                    "Actions / CFD", "stock",
+                    best_stock["factors_pos"], best_stock["factors_neg"],
+                    best_stock["asset_data"]
+                )
+                if not opp.get("skip"):
+                    entry  = opp.get("entrée",   best_stock["asset_data"]["price"])
+                    stop   = opp.get("stop",     entry * 0.96)
+                    target = opp.get("objectif", entry * 1.06)
+                    risk   = abs(entry - stop)
+                    reward = abs(target - entry)
+                    rr     = round(reward / risk, 1) if risk > 0 else 0
+                    opportunities.append({
+                        "asset":       best_stock["nom"],
+                        "ticker":      best_stock["ticker"],
+                        "classe":      "stock",
+                        "price":       best_stock["asset_data"]["price"],
+                        "change":      best_stock["asset_data"]["change"],
+                        "concordance": "FORTE" if best_stock["score"] >= 4 else "MODÉRÉE",
+                        "factors_pos": best_stock["factors_pos"],
+                        "factors_neg": best_stock["factors_neg"],
+                        "score":       best_stock["score"],
+                        "these":       opp.get("thèse",""),
+                        "entree":      entry,
+                        "stop":        stop,
+                        "objectif":    target,
+                        "rr":          rr,
+                        "horizon":     opp.get("horizon","5-10 jours"),
+                        "invalidation":opp.get("invalidation",""),
+                        "vehicule":    opp.get("véhicule","Actions / CFD"),
+                        "created_at":  datetime.now().isoformat()
+                    })
+                    print(f"    ✓ Opportunité stock {best_stock['nom']} générée — R/R 1:{rr}")
+            except Exception as e:
+                print(f"    ✗ Erreur stock : {e}")
 
     if not opportunities:
         print(f"  → Aucune opportunité détectée — marchés sans signal clair")

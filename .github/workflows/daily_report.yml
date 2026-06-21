@@ -32,6 +32,9 @@ jobs:
       - name: Collecte Napoléon 20F
         run: python3 collectors/collect_napoleon.py
 
+      - name: Collecte actions (stocks)
+        run: python3 collectors/collect_stocks.py
+
       - name: Génère le rapport
         run: python3 main.py --no-browser
 

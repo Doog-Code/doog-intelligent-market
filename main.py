@@ -21,10 +21,12 @@ def run_collectors():
     from collectors.collect_etf       import collect as etf
     from collectors.collect_macro     import collect as macro
     from collectors.collect_news      import collect as news
+    from collectors.collect_stocks    import collect as stocks
     coingecko()
     etf()
     macro()
     news()
+    stocks()
     log("Collecte terminée")
 
 # ══════════════════════════════════════════

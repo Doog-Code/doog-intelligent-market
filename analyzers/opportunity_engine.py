@@ -190,8 +190,9 @@ Génère une opportunité JSON avec exactement ces champs :
 }}
 
 Règles strictes :
-- Stop maximum 5% sous l'entrée
-- Objectif minimum R/R 1:2.5
+- Stop maximum 4% sous l'entrée
+- Objectif MINIMUM R/R 1:2.5 — si impossible, réponds {{"skip": true}}
+- Ne jamais générer un R/R inférieur à 2.5
 - Thèse basée UNIQUEMENT sur les facteurs fournis
 - Si les facteurs ne justifient pas une opportunité claire, réponds: {{"skip": true}}
 Réponds UNIQUEMENT avec le JSON, sans texte autour."""
@@ -348,16 +349,28 @@ def run(max_opportunities=3):
             factors_pos, factors_neg, score = score_factors(ticker, classe)
             print(f"    Score net : {score:+d} ({len(factors_pos)} pos / {len(factors_neg)} neg)")
 
-            if len(factors_pos) < 3 or score <= 0:
+            # Seuil par classe
+            min_factors = 3 if classe == "crypto" else 2
+
+            if len(factors_pos) < min_factors or score <= 0:
                 print(f"    ✗ Signal insuffisant")
                 continue
+
+            # Max 1 opportunité FAIBLE (2 facteurs) par rapport
+            if len(factors_pos) == 2:
+                already_faible = any(o for o in opportunities if o.get("score") == 2)
+                if already_faible:
+                    print(f"    ✗ Signal FAIBLE déjà utilisé ce rapport")
+                    continue
 
             if len(factors_pos) >= 5:
                 concordance = "MAJEURE"
             elif len(factors_pos) >= 4:
                 concordance = "FORTE"
-            else:
+            elif len(factors_pos) >= 3:
                 concordance = "MODÉRÉE"
+            else:
+                concordance = "FAIBLE"
 
             print(f"    ✓ Signal {concordance} — génération via Groq...")
 
@@ -365,6 +378,18 @@ def run(max_opportunities=3):
                 opp = generate_opportunity(ticker, nom, vehicule, classe, factors_pos, factors_neg, asset_data)
                 if opp.get("skip"):
                     print(f"    ✗ Groq juge le signal insuffisant")
+                    continue
+
+                entry  = opp.get("entrée",   asset_data["price"])
+                stop   = opp.get("stop",     entry * 0.96)
+                target = opp.get("objectif", entry * 1.08)
+                risk   = abs(entry - stop)
+                reward = abs(target - entry)
+                rr     = round(reward / risk, 1) if risk > 0 else 0
+
+                # Filtre R/R minimum 2.0
+                if rr < 2.0:
+                    print(f"    ✗ R/R insuffisant ({rr}) — skip")
                     continue
 
                 entry  = opp.get("entrée",   asset_data["price"])

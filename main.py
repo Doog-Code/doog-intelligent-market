@@ -54,15 +54,19 @@ def get_market_data():
 
 def get_news(limit=30):
     conn = sqlite3.connect(DB_PATH)
-    rows = conn.execute("""
+    # Quota fixe : 10 CRITIQUE + 20 IMPORTANT
+    critiques = conn.execute("""
         SELECT title, summary, source, url, published_at, category, importance
-        FROM articles
-        WHERE importance IN ('CRITIQUE','IMPORTANT')
-        ORDER BY CASE importance WHEN 'CRITIQUE' THEN 1 ELSE 2 END,
-                 collected_at DESC
-        LIMIT ?
-    """, (limit,)).fetchall()
+        FROM articles WHERE importance = 'CRITIQUE'
+        ORDER BY collected_at DESC LIMIT 10
+    """).fetchall()
+    importants = conn.execute("""
+        SELECT title, summary, source, url, published_at, category, importance
+        FROM articles WHERE importance = 'IMPORTANT'
+        ORDER BY collected_at DESC LIMIT 20
+    """).fetchall()
     conn.close()
+    rows = critiques + importants
     return [{"title":r[0], "summary":r[1], "source":r[2],
              "url":r[3], "published":r[4], "category":r[5],
              "importance":r[6]} for r in rows]

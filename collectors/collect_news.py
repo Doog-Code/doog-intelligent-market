@@ -44,7 +44,10 @@ FEEDS = [
         "url":        "https://www.esma.europa.eu/rss.xml",
         "source":     "ESMA",
         "category":   "regulation",
-        "importance": "CRITIQUE"
+        "importance": "IMPORTANT",
+        "max_entries": 5,
+        "keywords":   ["etf","crypto","bitcoin","stablecoin","mif","aifmd",
+                       "sanction","suspension","halt","market","trading","short"]
     },
 ]
 
@@ -115,7 +118,10 @@ def collect():
             feed   = feedparser.parse(feed_config["url"])
             status = getattr(feed, "status", "?")
 
-            for entry in feed.entries[:15]:
+            max_entries = feed_config.get("max_entries", 15)
+            feed_keywords = feed_config.get("keywords", [])
+
+            for entry in feed.entries[:max_entries]:
                 title   = entry.get("title","").strip()
                 summary = entry.get("summary", entry.get("description","")).strip()
                 url     = entry.get("link","")
@@ -126,6 +132,13 @@ def collect():
 
                 if not title or not url:
                     continue
+
+                # Filtre par keywords si défini pour cette source
+                if feed_keywords:
+                    text_check = (title + " " + summary).lower()
+                    if not any(kw in text_check for kw in feed_keywords):
+                        stats["BRUIT"] += 1
+                        continue
 
                 # Supprime les balises HTML des titres et résumés
                 title   = re.sub(r'<[^>]+>', '', title).strip()
